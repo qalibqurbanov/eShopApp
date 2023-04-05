@@ -16,6 +16,9 @@ namespace eShopApp.WebUI
 
             app.AddDefaultConfiguration(builder.Environment);
 
+            if(builder.Environment.IsDevelopment())
+                app.Seed();
+
             app.Run();
         }
     }

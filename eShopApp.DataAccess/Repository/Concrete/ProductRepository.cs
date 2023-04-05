@@ -9,9 +9,13 @@ using eShopApp.DataAccess.Repository.Concrete.GenericRepositories;
 using eShopApp.Entity.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using Microsoft.IdentityModel.Tokens;
 
 namespace eShopApp.DataAccess.Repository.Concrete
 {
+    /// <summary>
+    /// Mehsul ile elaqeli operasiyalarin implementasiyasini saxlayir.
+    /// </summary>
     public class ProductRepository : Repository<Product, ShopDbContext>, IProductRepository
     {
         private readonly ShopDbContext _dbContext;
@@ -22,14 +26,28 @@ namespace eShopApp.DataAccess.Repository.Concrete
 
         private DbSet<Product> DbTable => _dbContext.Set<Product>();
 
-        public List<Product> GetPopularProducts()
+        public Product GetProductDetails(int ID)
         {
-            throw new NotImplementedException();
+           return _dbContext.Products
+                .Where(prod => prod.ProductID == ID)
+                .Include(prod => prod.ProductCategories)
+                .ThenInclude(cat => cat.Category)
+                .FirstOrDefault();
         }
 
-        public List<Product> GetTop5Products()
+        public List<Product> GetProductsByCategoryID(int? CategoryID)
         {
-            throw new NotImplementedException();
+            /* 'Product' cedvelini icra olunmamiw sorgu weklinde elde edirem: */
+            var products = DbTable.AsQueryable();
+
+            if(!string.IsNullOrEmpty(CategoryID.ToString()))
+            {
+                products = products.Include(prod => prod.ProductCategories)
+                    .ThenInclude(prodCat => prodCat.Category)
+                    .Where(prod => prod.ProductCategories.Any(prod => prod.CategoryID == CategoryID)); /* Where geriye gosterdiyimiz CategoryID-ye sahib 'Product'-lari dondurecek */
+            }
+
+            return products.ToList();
         }
     }
 }

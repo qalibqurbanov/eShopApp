@@ -8,6 +8,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace eShopApp.DataAccess.Repository.Concrete.GenericRepositories
 {
+    /// <summary>
+    /// Konkret Repository siniflerinin her birinde gorulecek olan ortaq iwleri her birinde tekrarlamamaq ucun bu sinifde yazmiwam.
+    /// </summary>
+    /// <typeparam name="TEntity"></typeparam>
+    /// <typeparam name="TContext"></typeparam>
     public class Repository<TEntity, TContext> : IRepository<TEntity>
         where TEntity : class
         where TContext : DbContext

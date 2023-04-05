@@ -27,17 +27,27 @@ namespace eShopApp.Business.Services.Concrete
 
         public List<Product> GetAll()
         {
-            throw new NotImplementedException();
+            return _productRepository.GetAll();
         }
 
         public Product GetByID(int ID)
         {
-            throw new NotImplementedException();
+            return _productRepository.GetByID(ID);
         }
 
         public void Update(Product entity)
         {
             throw new NotImplementedException();
+        }
+
+        public Product GetProductDetails(int ID)
+        {
+            return _productRepository.GetProductDetails(ID);
+        }
+
+        public List<Product> GetProductsByCategoryID(int? CategoryID)
+        {
+            return _productRepository.GetProductsByCategoryID(CategoryID);
         }
     }
 }

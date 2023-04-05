@@ -9,11 +9,11 @@ using eShopApp.Entity.Entities;
 namespace eShopApp.DataAccess.Repository.Abstract
 {
     /// <summary>
-    /// Mehsul ile elaqeli operasiyalari saxlayir.
+    /// Mehsul ile elaqeli operasiyalarin skletini saxlayir.
     /// </summary>
     public interface IProductRepository : IRepository<Product>
     {
-        List<Product> GetPopularProducts();
-        List<Product> GetTop5Products();
+        Product GetProductDetails(int ID);
+        List<Product> GetProductsByCategoryID(int? CategoryID);
     }
 }

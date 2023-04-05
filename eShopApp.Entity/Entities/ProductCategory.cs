@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace eShopApp.Entity.Entities
 {
     /// <summary>
-    /// Mehsul ve Kateqoriyalar arasinda coxun-coxa elaqe qurmaq ucun iwledeceyim cross-table-dir.
+    /// Mehsul ve Kateqoriyalar arasinda coxun-coxa elaqe qurmaq ucun iwledeceyim 'Cross-Table (ortaq cedvel)'-dir.
     /// </summary>
     public class ProductCategory
     {

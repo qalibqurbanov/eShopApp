@@ -15,6 +15,6 @@ namespace eShopApp.Entity.Entities
         public string CategoryName { get; set; }
 
         /* Kateqoriyanon birden cox Mehsulu olacaq: */
-        public List<Order> ProductCategories { get; set; }
+        public List<ProductCategory> ProductCategories { get; set; }
     }
 }

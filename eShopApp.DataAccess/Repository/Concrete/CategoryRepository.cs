@@ -11,6 +11,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace eShopApp.DataAccess.Repository.Concrete
 {
+    /// <summary>
+    /// Kateqoriya ile elaqeli operasiyalarin implementasiyasini saxlayir.
+    /// </summary>
     public class CategoryRepository : Repository<Category, ShopDbContext>, ICategoryRepository
     {
         private readonly ShopDbContext _dbContext;
@@ -20,10 +23,5 @@ namespace eShopApp.DataAccess.Repository.Concrete
         }
 
         private DbSet<Category> DbTable => _dbContext.Set<Category>();
-
-        public List<Category> GetPopularCategories()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

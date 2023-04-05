@@ -9,16 +9,15 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace eShopApp.Business.Extensions.Configurations
 {
+    /// <summary>
+    /// ASP Core-un default servislerini ve menim custom servislerimi IoC Containera yerlewdirme emeliyyatlarini saxlayan sinifdir.
+    /// </summary>
     public static class RegisterServices
     {
+        /* ASP Core-un built-in/default servislerini ve ya proyektde iwletdiyim kitabxanalari(EF Core ucun DbContext ve s.) IoC Containera yerlewdirir. */
         public static void AddDefaultServices(this IServiceCollection serviceCollection, IConfiguration configuration)
         {
             serviceCollection.AddDbContext<ShopDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("ShopSqlConnectionString1")));
-
-            //serviceCollection.AddDefaultIdentity<IdentityUser>(options =>
-            //{
-            //    options.SignIn.RequireConfirmedAccount = false;
-            //}).AddEntityFrameworkStores<ApplicationDbContext>();
 
             serviceCollection.AddControllersWithViews()
                              .AddRazorRuntimeCompilation();
@@ -26,17 +25,14 @@ namespace eShopApp.Business.Extensions.Configurations
             serviceCollection.AddRazorPages();
         }
 
+        /* Custom servislerimi IoC Containera yerlewdirir. */
         public static void AddCustomServices(this IServiceCollection serviceCollection)
         {
-            //serviceCollection.AddScoped<IUnitOfWork, UnitOfWork>();
-
             serviceCollection.AddScoped<IProductRepository, ProductRepository>();
             serviceCollection.AddScoped<ICategoryRepository, CategoryRepository>();
 
             serviceCollection.AddScoped<IProductService, ProductManager>();
-
+            serviceCollection.AddScoped<ICategoryService, CategoryManager>();
         }
-
-
     }
 }

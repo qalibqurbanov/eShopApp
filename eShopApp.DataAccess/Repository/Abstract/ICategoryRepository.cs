@@ -9,10 +9,10 @@ using eShopApp.Entity.Entities;
 namespace eShopApp.DataAccess.Repository.Abstract
 {
     /// <summary>
-    /// Kateqoriya ile elaqeli operasiyalari saxlayir.
+    /// Kateqoriya ile elaqeli operasiyalarin skletini saxlayir.
     /// </summary>
     public interface ICategoryRepository : IRepository<Category>
     {
-        List<Category> GetPopularCategories();
+
     }
 }

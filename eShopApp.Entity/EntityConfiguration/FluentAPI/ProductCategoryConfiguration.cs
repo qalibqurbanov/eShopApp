@@ -10,6 +10,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace eShopApp.Entity.EntityConfiguration.FluentAPI
 {
+    /// <summary>
+    /// ProductCategory modelinin Fluent API ile edilmiw konfiqurasiyalarini saxlayir.
+    /// </summary>
     public class ProductCategoryConfiguration : IEntityTypeConfiguration<ProductCategory>
     {
         public void Configure(EntityTypeBuilder<ProductCategory> builder)

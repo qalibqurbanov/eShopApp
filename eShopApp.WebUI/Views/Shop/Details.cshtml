@@ -1,0 +1,38 @@
+@model ProductDetailViewModel
+
+<div class="row">
+    <div class="col-md-3 mt-4 border" style="height:fit-content;">
+        <img src="~/img/ProductImages/@Model.Product.ProductImageName" class="img-fluid">
+
+        <hr />
+
+        <h4 class="text-info p-2 text-center">
+            @Model.Product.ProductPrice <i class="fas fa-manat-sign"></i>
+        </h4>
+    </div>
+
+    <div class="col-md-9">
+        <div class="card mt-4">
+            <div class="card-body">
+                <h5 class="card-title display-6 text-warning">@Model.Product.ProductName</h5>
+
+                <hr />
+
+                <h5 class="card-text fw-medium text-dark">&nbsp;&nbsp;&nbsp;&nbsp;@Model.Product.ProductDescription</h5>
+
+                <div class="d-flex justify-content-center pt-2 pb-2">
+                    <button type="submit" class="btn btn-primary btn-lg">Add to Cart</button>
+                </div>
+
+                <hr />
+
+                <h4 class="lead">Categories:
+                    @foreach (Category cat in Model.Categories)
+                    {
+                        <a asp-controller="shop" asp-action="list" asp-route-id="@cat.CategoryID" class="p-2 btn btn-outline-danger">@cat.CategoryName</a>
+                    }
+                </h4>
+            </div>
+        </div>
+    </div>
+</div>
