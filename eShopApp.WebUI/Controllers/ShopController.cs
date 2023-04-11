@@ -1,5 +1,6 @@
 ﻿using eShopApp.Business.Services.Abstract;
 using eShopApp.Entity.Entities;
+using eShopApp.WebUI.Models;
 using eShopApp.WebUI.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,24 +15,24 @@ namespace eShopApp.WebUI.Controllers
         }
 
         // id - produktlarini elde edeceyim kateqoriyanin id-sini temsil edir.
-        public IActionResult List(int? id)
+        // page - query stringden yaxalanacaq.
+        public IActionResult List([FromRoute]int? id, [FromQuery]int page = 1) /* Query String-den 'Page' yaxalanmayada biler, yaxalanmasa Page-e 0 gelecek ve xeta alacayiq, bu sebeble hecne yaxalanmasa 'Page' 1 olsun deyirik */
         {
-            ProductListViewModel productListVM;
+            // GetAll() lazim deyilse sil
+            
+            const int productCountPerPage = 3;
 
-            if (id == null || id == 0)
+            ProductListViewModel productListVM = new ProductListViewModel()
             {
-                productListVM = new ProductListViewModel()
+                PageInfo = new PageInfo()
                 {
-                    Products = _productService.GetAll()
-                };
-            }
-            else
-            {
-                productListVM = new ProductListViewModel()
-                {
-                    Products = _productService.GetProductsByCategoryID(id)
-                };
-            }
+                    TotalProducts = _productService.GetProductCountByCategoryID(id),
+                    CurrentPage = page,
+                    ProductsPerPage = productCountPerPage,
+                    CurrentCategoryID = id
+                },
+                Products = _productService.GetProductsByCategoryID(id, page, productCountPerPage)
+            };
 
             return View(productListVM);
         }

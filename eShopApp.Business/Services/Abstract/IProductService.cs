@@ -11,6 +11,5 @@ namespace eShopApp.Business.Services.Abstract
 {
     public interface IProductService : IRepository<Product>, IProductRepository
     {
-        
     }
 }

@@ -17,6 +17,30 @@
     </div>
 </div>
 
+<div class="row">
+    <div class="col d-flex justify-content-center">
+        <ul class="pagination">
+            @for (int pageNum = 0; pageNum < Model.PageInfo.TotalPages; pageNum++)
+            {
+                /* Eger hazirda her hansi bir kateqoriya secilmeyibse - sehifeleri yaradiriq, elave olaraq sehife nomresini yerlewdiririk query stringe ('List' action metodunda bu parametri yaxalayiriq): */
+                @if(String.IsNullOrEmpty(Model.PageInfo.CurrentCategoryID.ToString()))
+                {
+                    <li class="page-item @(Model.PageInfo.CurrentPage == (pageNum+1) ? "active" : "")">
+                        <a class="page-link" href="/products?page=@(pageNum + 1)">@(pageNum + 1)</a>
+                    </li>
+                }
+                /* Eger hansisa kateqoriya secilibse hemin kateqoriyadaki produktlara uygun pagination yaradacayiq, elave olaraq sehife nomresini yerlewdiririk query stringe ('List' action metodunda bu parametri yaxalayiriq): */
+                else
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="/products/@Model.PageInfo.CurrentCategoryID?page=@(pageNum + 1)">@(pageNum + 1)</a>
+                    </li>
+                }
+            }
+        </ul>
+    </div>
+</div>
+
 @section Scripts
 {
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>

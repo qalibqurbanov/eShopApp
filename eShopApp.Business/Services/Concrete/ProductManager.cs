@@ -45,9 +45,14 @@ namespace eShopApp.Business.Services.Concrete
             return _productRepository.GetProductDetails(ID);
         }
 
-        public List<Product> GetProductsByCategoryID(int? CategoryID)
+        public List<Product> GetProductsByCategoryID(int? CategoryID, int Page, int ProductCountByPage)
         {
-            return _productRepository.GetProductsByCategoryID(CategoryID);
+            return _productRepository.GetProductsByCategoryID(CategoryID, Page, ProductCountByPage);
+        }
+
+        public int GetProductCountByCategoryID(int? CategoryID)
+        {
+            return _productRepository.GetProductCountByCategoryID(CategoryID);
         }
     }
 }

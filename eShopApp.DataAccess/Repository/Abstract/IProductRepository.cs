@@ -14,6 +14,7 @@ namespace eShopApp.DataAccess.Repository.Abstract
     public interface IProductRepository : IRepository<Product>
     {
         Product GetProductDetails(int ID);
-        List<Product> GetProductsByCategoryID(int? CategoryID);
+        List<Product> GetProductsByCategoryID(int? CategoryID, int Page, int ProductCountByPage);
+        int GetProductCountByCategoryID(int? CategoryID);
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Azure;
 using eShopApp.DataAccess.DatabaseContext;
 using eShopApp.DataAccess.Repository.Abstract;
 using eShopApp.DataAccess.Repository.Concrete.GenericRepositories;
@@ -35,7 +36,7 @@ namespace eShopApp.DataAccess.Repository.Concrete
                 .FirstOrDefault();
         }
 
-        public List<Product> GetProductsByCategoryID(int? CategoryID)
+        public List<Product> GetProductsByCategoryID(int? CategoryID, int Page, int ProductCountByPage)
         {
             /* 'Product' cedvelini icra olunmamiw sorgu weklinde elde edirem: */
             var products = DbTable.AsQueryable();
@@ -47,7 +48,24 @@ namespace eShopApp.DataAccess.Repository.Concrete
                     .Where(prod => prod.ProductCategories.Any(prod => prod.CategoryID == CategoryID)); /* Where geriye gosterdiyimiz CategoryID-ye sahib 'Product'-lari dondurecek */
             }
 
-            return products.ToList();
+            /* Niye "(Page - 1) * ProductCountByPage" : Eger 'Page' verilmese, Controllerden bura optional Page parametrinde olan 1 deyeri gelecek ve 0-da 'ProductCountByPage' -e vururuq, netice olacaq 0. Yeni, 'Page' verilmese hec bir datani skipleme - demiw oluruq */
+            return products.Skip((Page - 1) * ProductCountByPage).Take(ProductCountByPage).ToList();
+        }
+
+        public int GetProductCountByCategoryID(int? CategoryID)
+        {
+
+            /* 'Product' cedvelini icra olunmamiw sorgu weklinde elde edirem: */
+            var products = DbTable.AsQueryable();
+
+            if (!string.IsNullOrEmpty(CategoryID.ToString()))
+            {
+                products = products.Include(prod => prod.ProductCategories)
+                    .ThenInclude(prodCat => prodCat.Category)
+                    .Where(prod => prod.ProductCategories.Any(prod => prod.CategoryID == CategoryID)); /* Where geriye gosterdiyimiz CategoryID-ye sahib 'Product'-lari dondurecek */
+            }
+
+            return products.Count();
         }
     }
 }
