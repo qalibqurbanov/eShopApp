@@ -8,13 +8,13 @@ using eShopApp.Entity.Entities;
 namespace eShopApp.DataAccess.Repository.Abstract.GenericRepositories
 {
     /// <summary>
-    /// Repository interfeysleri ucun ortaq funksionalliqlari saxlayir.
+    /// Repository interfeysleri ucun ortaq funksionalliqlarin skletini saxlayir.
     /// </summary>
     /// <typeparam name="TEntity">Istifade edilecek modelin tipi.</typeparam>
     public interface IRepository<TEntity>
     {
-        TEntity GetByID(int ID);
-        List<TEntity> GetAll();
+        TEntity GetByID(int ID, bool DisableChangeTracker);
+        List<TEntity> GetAll(bool DisableChangeTracker);
         void Create(TEntity entity);
         void Update(TEntity entity);
         void Delete(TEntity entity);

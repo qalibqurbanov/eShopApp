@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Azure;
-using eShopApp.DataAccess.DatabaseContext;
+﻿using eShopApp.DataAccess.DatabaseContext;
 using eShopApp.DataAccess.Repository.Abstract;
 using eShopApp.DataAccess.Repository.Concrete.GenericRepositories;
 using eShopApp.Entity.Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Conventions;
-using Microsoft.IdentityModel.Tokens;
 
 namespace eShopApp.DataAccess.Repository.Concrete
 {
@@ -27,45 +19,99 @@ namespace eShopApp.DataAccess.Repository.Concrete
 
         private DbSet<Product> DbTable => _dbContext.Set<Product>();
 
-        public Product GetProductDetails(int ID)
+        public Product GetProductDetails(int ID, bool DisableChangeTracker)
         {
-           return _dbContext.Products
-                .Where(prod => prod.ProductID == ID)
-                .Include(prod => prod.ProductCategories)
-                .ThenInclude(cat => cat.Category)
-                .FirstOrDefault();
+            if (DisableChangeTracker)
+            {
+                return _dbContext.Products
+                        .AsNoTracking()
+                        .Where(prod => prod.ProductID == ID)
+                        .Include(prod => prod.ProductCategories)
+                        .ThenInclude(cat => cat.Category)
+                        .FirstOrDefault();
+            }
+            else
+            {
+                return _dbContext.Products
+                        .Where(prod => prod.ProductID == ID)
+                        .Include(prod => prod.ProductCategories)
+                        .ThenInclude(cat => cat.Category)
+                        .FirstOrDefault();
+            }
         }
 
-        public List<Product> GetProductsByCategoryID(int? CategoryID, int Page, int ProductCountByPage)
+        public List<Product> GetProductsByCategoryID(int? CategoryID, int Page, int ProductCountByPage, bool DisableChangeTracker)
         {
             /* 'Product' cedvelini icra olunmamiw sorgu weklinde elde edirem: */
             var products = DbTable.AsQueryable();
 
-            if(!string.IsNullOrEmpty(CategoryID.ToString()))
+            if (!string.IsNullOrEmpty(CategoryID.ToString()))
             {
-                products = products.Include(prod => prod.ProductCategories)
-                    .ThenInclude(prodCat => prodCat.Category)
-                    .Where(prod => prod.ProductCategories.Any(prod => prod.CategoryID == CategoryID)); /* Where geriye gosterdiyimiz CategoryID-ye sahib 'Product'-lari dondurecek */
+                if (DisableChangeTracker)
+                {
+                    products = products
+                        .AsNoTracking()
+                        .Include(prod => prod.ProductCategories)
+                        .ThenInclude(prodCat => prodCat.Category)
+                        .Where(prod => prod.ProductCategories.Any(prod => prod.CategoryID == CategoryID)); /* Where geriye gosterdiyimiz CategoryID-ye sahib 'Product'-lari dondurecek */
+                }
+                else
+                {
+                    products = products
+                        .Include(prod => prod.ProductCategories)
+                        .ThenInclude(prodCat => prodCat.Category)
+                        .Where(prod => prod.ProductCategories.Any(prod => prod.CategoryID == CategoryID)); /* Where geriye gosterdiyimiz CategoryID-ye sahib 'Product'-lari dondurecek */
+                }
             }
 
             /* Niye "(Page - 1) * ProductCountByPage" : Eger 'Page' verilmese, Controllerden bura optional Page parametrinde olan 1 deyeri gelecek ve 0-da 'ProductCountByPage' -e vururuq, netice olacaq 0. Yeni, 'Page' verilmese hec bir datani skipleme - demiw oluruq */
             return products.Skip((Page - 1) * ProductCountByPage).Take(ProductCountByPage).ToList();
         }
 
-        public int GetProductCountByCategoryID(int? CategoryID)
+        public int GetProductCountByCategoryID(int? CategoryID, bool DisableChangeTracker)
         {
-
             /* 'Product' cedvelini icra olunmamiw sorgu weklinde elde edirem: */
             var products = DbTable.AsQueryable();
 
             if (!string.IsNullOrEmpty(CategoryID.ToString()))
             {
-                products = products.Include(prod => prod.ProductCategories)
-                    .ThenInclude(prodCat => prodCat.Category)
-                    .Where(prod => prod.ProductCategories.Any(prod => prod.CategoryID == CategoryID)); /* Where geriye gosterdiyimiz CategoryID-ye sahib 'Product'-lari dondurecek */
+                if (DisableChangeTracker)
+                {
+                    products = products
+                        .AsNoTracking()
+                        .Include(prod => prod.ProductCategories)
+                        .ThenInclude(prodCat => prodCat.Category)
+                        .Where(prod => prod.ProductCategories.Any(prod => prod.CategoryID == CategoryID)); /* Where geriye gosterdiyimiz CategoryID-ye sahib 'Product'-lari dondurecek */
+                }
+                else
+                {
+                    products = products
+                        .Include(prod => prod.ProductCategories)
+                        .ThenInclude(prodCat => prodCat.Category)
+                        .Where(prod => prod.ProductCategories.Any(prod => prod.CategoryID == CategoryID)); /* Where geriye gosterdiyimiz CategoryID-ye sahib 'Product'-lari dondurecek */
+                }
             }
 
             return products.Count();
+        }
+
+        public List<Product> GetHomePageProducts(bool DisableChangeTracker)
+        {
+            var products = DbTable.AsQueryable();
+
+            if(DisableChangeTracker)
+            {
+                products = products
+                    .AsQueryable()
+                    .Where(prod => prod.ProductIsApproved == true);
+            }
+            else
+            {
+                products = products
+                    .Where(prod => prod.ProductIsApproved == true);
+            }
+
+            return products.ToList();
         }
     }
 }

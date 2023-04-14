@@ -11,35 +11,35 @@ namespace eShopApp.Business.Services.Concrete
 {
     public class CategoryManager : ICategoryService
     {
-        private ICategoryRepository _categoryRepository;
+        private readonly ICategoryRepository _categoryRepository;
         public CategoryManager(ICategoryRepository categoryRepository)
         {
             this._categoryRepository = categoryRepository;
         }
 
-        public void Create(Category entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Delete(Category entity)
-        {
-            throw new NotImplementedException();
-        }
-
         public List<Category> GetAll()
         {
-            return _categoryRepository.GetAll();
+            return _categoryRepository.GetAll(true);
         }
 
         public Category GetByID(int ID)
         {
-            throw new NotImplementedException();
+            return _categoryRepository.GetByID(ID, true);
         }
 
         public void Update(Category entity)
         {
-            throw new NotImplementedException();
+            _categoryRepository.Update(entity);
+        }
+
+        public void Create(Category entity)
+        {
+            _categoryRepository.Create(entity);
+        }
+
+        public void Delete(Category entity)
+        {
+            _categoryRepository.Delete(entity);
         }
     }
 }

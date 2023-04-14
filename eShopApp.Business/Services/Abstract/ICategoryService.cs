@@ -9,8 +9,16 @@ using eShopApp.Entity.Entities;
 
 namespace eShopApp.Business.Services.Abstract
 {
-    public interface ICategoryService : IRepository<Category>, ICategoryRepository
+    public interface ICategoryService
     {
+        /* IRepository */
+        Category GetByID(int ID);
+        List<Category> GetAll();
+        void Create(Category entity);
+        void Update(Category entity);
+        void Delete(Category entity);
 
+        /* ICategoryRepository */
+        // ...
     }
 }

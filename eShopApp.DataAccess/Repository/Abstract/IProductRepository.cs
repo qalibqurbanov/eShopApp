@@ -13,8 +13,9 @@ namespace eShopApp.DataAccess.Repository.Abstract
     /// </summary>
     public interface IProductRepository : IRepository<Product>
     {
-        Product GetProductDetails(int ID);
-        List<Product> GetProductsByCategoryID(int? CategoryID, int Page, int ProductCountByPage);
-        int GetProductCountByCategoryID(int? CategoryID);
+        Product GetProductDetails(int ID, bool DisableChangeTracker);
+        List<Product> GetProductsByCategoryID(int? CategoryID, int Page, int ProductCountByPage, bool DisableChangeTracker);
+        int GetProductCountByCategoryID(int? CategoryID, bool DisableChangeTracker);
+        List<Product> GetHomePageProducts(bool DisableChangeTracker);
     }
 }

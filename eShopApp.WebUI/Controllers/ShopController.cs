@@ -8,7 +8,7 @@ namespace eShopApp.WebUI.Controllers
 {
     public class ShopController : Controller
     {
-        private IProductService _productService;
+        private readonly IProductService _productService;
         public ShopController(IProductService productService)
         {
             this._productService = productService;
@@ -18,10 +18,9 @@ namespace eShopApp.WebUI.Controllers
         // page - query stringden yaxalanacaq.
         public IActionResult List([FromRoute]int? id, [FromQuery]int page = 1) /* Query String-den 'Page' yaxalanmayada biler, yaxalanmasa Page-e 0 gelecek ve xeta alacayiq, bu sebeble hecne yaxalanmasa 'Page' 1 olsun deyirik */
         {
-            // GetAll() lazim deyilse sil
-            
             const int productCountPerPage = 3;
 
+            /* Secilen sehife haqqinda melumatlari ve hemin o secilen sehifede gosterilecek olan mehsullari gonderirik View-ya: */
             ProductListViewModel productListVM = new ProductListViewModel()
             {
                 PageInfo = new PageInfo()

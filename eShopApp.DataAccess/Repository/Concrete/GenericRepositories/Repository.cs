@@ -25,10 +25,21 @@ namespace eShopApp.DataAccess.Repository.Concrete.GenericRepositories
 
         private DbSet<TEntity> DbTable => _dbContext.Set<TEntity>();
 
-        public void Create(TEntity entity)
+        public List<TEntity> GetAll(bool DisableChangeTracker)
         {
-            DbTable.Add(entity);
+            return DbTable.ToList();
+        }
 
+        public TEntity GetByID(int ID, bool DisableChangeTracker)
+        {
+            TEntity entity = DbTable.Find(ID);
+
+            return entity;
+        }
+
+        public void Update(TEntity entity)
+        {
+            DbTable.Entry(entity).State = EntityState.Modified;
             _dbContext.SaveChanges();
         }
 
@@ -39,21 +50,10 @@ namespace eShopApp.DataAccess.Repository.Concrete.GenericRepositories
             _dbContext.SaveChanges();
         }
 
-        public List<TEntity> GetAll()
+        public void Create(TEntity entity)
         {
-            return DbTable.ToList();
-        }
+            DbTable.Add(entity);
 
-        public TEntity GetByID(int ID)
-        {
-            TEntity entity = DbTable.Find(ID);
-
-            return entity;
-        }
-
-        public void Update(TEntity entity)
-        {
-            DbTable.Entry(entity).State = EntityState.Modified;
             _dbContext.SaveChanges();
         }
     }

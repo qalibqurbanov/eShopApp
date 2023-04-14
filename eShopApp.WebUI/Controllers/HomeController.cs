@@ -6,7 +6,7 @@ namespace eShopApp.WebUI.Controllers
 {
     public class HomeController : Controller
     {
-        private IProductRepository _productRepository;
+        private readonly IProductRepository _productRepository;
         public HomeController(IProductRepository productRepository)
         {
             this._productRepository = productRepository;
@@ -16,7 +16,7 @@ namespace eShopApp.WebUI.Controllers
         {
             ProductListViewModel productViewModel = new ProductListViewModel()
             {
-                Products = _productRepository.GetAll()
+                Products = _productRepository.GetAll(true)
             };
 
             return View(productViewModel);

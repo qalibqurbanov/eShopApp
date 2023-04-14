@@ -12,8 +12,43 @@ namespace eShopApp.Business.Services.Concrete
 {
     public class ProductManager : IProductService
     {
-        private IProductRepository _productRepository;
+        private readonly IProductRepository _productRepository;
         public ProductManager(IProductRepository productRepository) => _productRepository = productRepository;
+
+        public List<Product> GetAll()
+        {
+            return _productRepository.GetAll(true);
+        }
+
+        public Product GetByID(int ID)
+        {
+            return _productRepository.GetByID(ID, true);
+        }
+
+        public List<Product> GetHomePageProducts()
+        {
+            return _productRepository.GetHomePageProducts(true);
+        }
+
+        public int GetProductCountByCategoryID(int? CategoryID)
+        {
+            return _productRepository.GetProductCountByCategoryID(CategoryID, true);
+        }
+
+        public Product GetProductDetails(int ID)
+        {
+            return _productRepository.GetProductDetails(ID, true);
+        }
+
+        public List<Product> GetProductsByCategoryID(int? CategoryID, int Page, int ProductCountByPage)
+        {
+            return _productRepository.GetProductsByCategoryID(CategoryID, Page, ProductCountByPage, true);
+        }
+
+        public void Update(Product entity)
+        {
+            _productRepository.Update(entity);
+        }
 
         public void Create(Product entity)
         {
@@ -22,37 +57,7 @@ namespace eShopApp.Business.Services.Concrete
 
         public void Delete(Product entity)
         {
-            throw new NotImplementedException();
-        }
-
-        public List<Product> GetAll()
-        {
-            return _productRepository.GetAll();
-        }
-
-        public Product GetByID(int ID)
-        {
-            return _productRepository.GetByID(ID);
-        }
-
-        public void Update(Product entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Product GetProductDetails(int ID)
-        {
-            return _productRepository.GetProductDetails(ID);
-        }
-
-        public List<Product> GetProductsByCategoryID(int? CategoryID, int Page, int ProductCountByPage)
-        {
-            return _productRepository.GetProductsByCategoryID(CategoryID, Page, ProductCountByPage);
-        }
-
-        public int GetProductCountByCategoryID(int? CategoryID)
-        {
-            return _productRepository.GetProductCountByCategoryID(CategoryID);
+            _productRepository.Delete(entity);
         }
     }
 }
