@@ -48,7 +48,7 @@ namespace eShopApp.Business.Extensions.Configurations
                 endpoints.MapControllerRoute
                 (
                     name: "default",
-                    pattern: "{controller=shop}/{action=list}/{id?}"
+                    pattern: "{controller=Home}/{action=Index}/{id?}"
                 );
 
                 endpoints.MapRazorPages();

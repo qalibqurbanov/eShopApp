@@ -51,6 +51,7 @@ namespace eShopApp.DataAccess.Repository.Concrete
                 {
                     products = products
                         .AsNoTracking()
+                        .Where(prod => prod.ProductIsApproved)
                         .Include(prod => prod.ProductCategories)
                         .ThenInclude(prodCat => prodCat.Category)
                         .Where(prod => prod.ProductCategories.Any(prod => prod.CategoryID == CategoryID)); /* Where geriye gosterdiyimiz CategoryID-ye sahib 'Product'-lari dondurecek */
@@ -58,6 +59,7 @@ namespace eShopApp.DataAccess.Repository.Concrete
                 else
                 {
                     products = products
+                        .Where(prod => prod.ProductIsApproved)
                         .Include(prod => prod.ProductCategories)
                         .ThenInclude(prodCat => prodCat.Category)
                         .Where(prod => prod.ProductCategories.Any(prod => prod.CategoryID == CategoryID)); /* Where geriye gosterdiyimiz CategoryID-ye sahib 'Product'-lari dondurecek */
@@ -79,6 +81,7 @@ namespace eShopApp.DataAccess.Repository.Concrete
                 {
                     products = products
                         .AsNoTracking()
+                        .Where(prod => prod.ProductIsApproved)
                         .Include(prod => prod.ProductCategories)
                         .ThenInclude(prodCat => prodCat.Category)
                         .Where(prod => prod.ProductCategories.Any(prod => prod.CategoryID == CategoryID)); /* Where geriye gosterdiyimiz CategoryID-ye sahib 'Product'-lari dondurecek */
@@ -86,6 +89,7 @@ namespace eShopApp.DataAccess.Repository.Concrete
                 else
                 {
                     products = products
+                        .Where(prod => prod.ProductIsApproved)
                         .Include(prod => prod.ProductCategories)
                         .ThenInclude(prodCat => prodCat.Category)
                         .Where(prod => prod.ProductCategories.Any(prod => prod.CategoryID == CategoryID)); /* Where geriye gosterdiyimiz CategoryID-ye sahib 'Product'-lari dondurecek */
@@ -103,12 +107,12 @@ namespace eShopApp.DataAccess.Repository.Concrete
             {
                 products = products
                     .AsQueryable()
-                    .Where(prod => prod.ProductIsApproved == true);
+                    .Where(prod => prod.ProductIsHome == true && prod.ProductIsApproved == true);
             }
             else
             {
                 products = products
-                    .Where(prod => prod.ProductIsApproved == true);
+                    .Where(prod => prod.ProductIsHome == true && prod.ProductIsApproved == true);
             }
 
             return products.ToList();

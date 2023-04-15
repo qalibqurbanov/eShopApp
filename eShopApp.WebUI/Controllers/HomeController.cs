@@ -16,7 +16,7 @@ namespace eShopApp.WebUI.Controllers
         {
             ProductListViewModel productViewModel = new ProductListViewModel()
             {
-                Products = _productRepository.GetAll(true)
+                Products = _productRepository.GetHomePageProducts(true)
             };
 
             return View(productViewModel);

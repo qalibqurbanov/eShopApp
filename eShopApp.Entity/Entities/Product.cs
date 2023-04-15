@@ -12,6 +12,7 @@ namespace eShopApp.Entity.Entities
         public string ProductDescription { get; set; }
         public string ProductImageName   { get; set; }
         public bool   ProductIsApproved  { get; set; }
+        public bool   ProductIsHome      { get; set; }
 
         /* Mehsulun birden cox Kateqoriyasi olacaq: */
         public List<ProductCategory> ProductCategories { get; set; }
