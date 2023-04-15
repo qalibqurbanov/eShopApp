@@ -3,6 +3,7 @@ using eShopApp.Entity.Entities;
 using eShopApp.WebUI.Models;
 using eShopApp.WebUI.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace eShopApp.WebUI.Controllers
 {
@@ -16,7 +17,7 @@ namespace eShopApp.WebUI.Controllers
 
         // id - produktlarini elde edeceyim kateqoriyanin id-sini temsil edir.
         // page - query stringden yaxalanacaq.
-        public IActionResult List([FromRoute]int? id, [FromQuery]int page = 1) /* Query String-den 'Page' yaxalanmayada biler, yaxalanmasa Page-e 0 gelecek ve xeta alacayiq, bu sebeble hecne yaxalanmasa 'Page' 1 olsun deyirik */
+        public IActionResult List([FromRoute] int? id, [FromQuery] int page = 1) /* Query String-den 'Page' yaxalanmayada biler, yaxalanmasa Page-e 0 gelecek ve xeta alacayiq, bu sebeble hecne yaxalanmasa 'Page' 1 olsun deyirik */
         {
             const int productCountPerPage = 3;
 
@@ -38,7 +39,7 @@ namespace eShopApp.WebUI.Controllers
 
         public IActionResult Details(int? id)
         {
-            if(id == null)
+            if (id == null)
                 return NotFound();
 
             Product product = _productService.GetProductDetails((int)id);
@@ -51,6 +52,16 @@ namespace eShopApp.WebUI.Controllers
                 Product = product,
                 Categories = product.ProductCategories.Select(cat => cat.Category).ToList()
             });
+        }
+
+        public IActionResult Search([FromQuery]string q) /* '_search' partialinda bu 'q' parametrini yerlewdirmiwdik Query Stringe. Burada 'Search()' actioninda hemin 'q'-nin datasini(?q=...) yaxalayiriq */
+        {
+            var productListVM = new ProductListViewModel()
+            {
+                Products = _productService.GetSearchResult(q)
+            };
+
+            return View(productListVM);
         }
     }
 }

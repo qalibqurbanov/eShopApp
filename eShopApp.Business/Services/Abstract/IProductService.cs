@@ -23,5 +23,6 @@ namespace eShopApp.Business.Services.Abstract
         List<Product> GetProductsByCategoryID(int? CategoryID, int Page, int ProductCountByPage);
         int GetProductCountByCategoryID(int? CategoryID);
         List<Product> GetHomePageProducts();
+        List<Product> GetSearchResult(string SearchString);
     }
 }

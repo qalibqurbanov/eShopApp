@@ -17,5 +17,6 @@ namespace eShopApp.DataAccess.Repository.Abstract
         List<Product> GetProductsByCategoryID(int? CategoryID, int Page, int ProductCountByPage, bool DisableChangeTracker);
         int GetProductCountByCategoryID(int? CategoryID, bool DisableChangeTracker);
         List<Product> GetHomePageProducts(bool DisableChangeTracker);
+        List<Product> GetSearchResult(string SearchString, bool DisableChangeTracker);
     }
 }

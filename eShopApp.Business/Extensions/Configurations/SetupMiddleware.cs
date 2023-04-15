@@ -33,6 +33,15 @@ namespace eShopApp.Business.Extensions.Configurations
 
             app.UseEndpoints(endpoints =>
             {
+                // "/search/"   : Sorgu sirf bu wekilde atilsa '_noproduct' render olunacaq, cunki axtarilacaq olan mehsul adi verilmeyib.
+                // "/search?q=" : '_search' partialinda form submit olunanda bu 'q' yazilacaq Query Stringe ve Actionda bu 'q'-ni yaxalayaraq DB-da axtaracayiq mehsulu.
+                endpoints.MapControllerRoute
+                (
+                    name:"search",
+                    pattern: "search",
+                    defaults: new { controller = "Shop", action = "search" }
+                );
+
                 // "/products/"
                 // "/products/id?"
                 endpoints.MapControllerRoute

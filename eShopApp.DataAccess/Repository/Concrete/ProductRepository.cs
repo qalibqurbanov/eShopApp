@@ -106,13 +106,32 @@ namespace eShopApp.DataAccess.Repository.Concrete
             if(DisableChangeTracker)
             {
                 products = products
-                    .AsQueryable()
+                    .AsNoTracking()
                     .Where(prod => prod.ProductIsHome == true && prod.ProductIsApproved == true);
             }
             else
             {
                 products = products
                     .Where(prod => prod.ProductIsHome == true && prod.ProductIsApproved == true);
+            }
+
+            return products.ToList();
+        }
+
+        public List<Product> GetSearchResult(string SearchString, bool DisableChangeTracker)
+        {
+            var products = DbTable.AsQueryable();
+
+            if (DisableChangeTracker)
+            {
+                products = products
+                    .AsNoTracking()
+                    .Where(prod => prod.ProductIsApproved == true && (prod.ProductName.Contains(SearchString) == true || prod.ProductDescription.Contains(SearchString) == true));
+            }
+            else
+            {
+                products = products
+                    .Where(prod => prod.ProductIsApproved == true && (prod.ProductName.ToLower().Contains(SearchString.ToLower()) == true || prod.ProductDescription.ToLower().Contains(SearchString.ToLower()) == true));
             }
 
             return products.ToList();

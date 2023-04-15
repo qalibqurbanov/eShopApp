@@ -1,0 +1,20 @@
+﻿<div class="card mb-3">
+    <div class="card-header">
+        <h5>Search</h5>
+    </div>
+
+    <div class="card-body">
+        <form action="/search" method="get">
+            <div class="input-group">
+                <!-- User inputa nese yazib 'Submit'-e basanda query stringe bu cur bir melumat yazilacaq: "/search?q=InputaYazilmiwData" :yeni inputun 'name' atributu sayesinde inputun datasini 'submit'-e basilan anda yerlewdiririk Query Stringe ve ASP Core-da actionda yaxalayiriq hemin bu Query Stringdeki 'q' parametrini. -->
+                <!-- Yeni, 'name' atributu sayesinde Query String-e bunu: "/search?q=" :yerlewdirmiw olduq. -->
+
+                <input name="q" class="form-control" type="search" placeholder="Product name..." a>
+            </div>
+
+            <div class="input-group mt-1">
+                <button class="btn btn-danger btn-sm d-block w-100" type="submit">Search</button>
+            </div>
+        </form>
+    </div>
+</div>

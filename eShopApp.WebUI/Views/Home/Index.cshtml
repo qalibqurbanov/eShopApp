@@ -11,6 +11,8 @@ else
     <div class="container">
         <div class="row">
             <div class="col-md-3">
+                <partial name="/Views/Shared/Partials/_search.cshtml" />
+
                 @await Component.InvokeAsync("Categories")
             </div>
 

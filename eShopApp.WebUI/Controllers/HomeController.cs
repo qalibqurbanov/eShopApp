@@ -1,4 +1,5 @@
-﻿using eShopApp.DataAccess.Repository.Abstract;
+﻿using eShopApp.Business.Services.Abstract;
+using eShopApp.DataAccess.Repository.Abstract;
 using eShopApp.WebUI.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,17 +7,17 @@ namespace eShopApp.WebUI.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IProductRepository _productRepository;
-        public HomeController(IProductRepository productRepository)
+        private readonly IProductService _productService;
+        public HomeController(IProductService productService)
         {
-            this._productRepository = productRepository;
+            this._productService = productService;
         }
 
         public IActionResult Index()
         {
             ProductListViewModel productViewModel = new ProductListViewModel()
             {
-                Products = _productRepository.GetHomePageProducts(true)
+                Products = _productService.GetHomePageProducts()
             };
 
             return View(productViewModel);
