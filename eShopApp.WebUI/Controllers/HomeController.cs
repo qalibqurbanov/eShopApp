@@ -13,6 +13,7 @@ namespace eShopApp.WebUI.Controllers
             this._productService = productService;
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
             ProductListViewModel productViewModel = new ProductListViewModel()
@@ -23,12 +24,13 @@ namespace eShopApp.WebUI.Controllers
             return View(productViewModel);
         }
 
-        // localhost:5000/home/about
+        [HttpGet]
         public IActionResult About()
         {
             return View();
         }
 
+        [HttpGet]
         public IActionResult Contact()
         {
             return View();

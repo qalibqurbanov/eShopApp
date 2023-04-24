@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,9 +13,11 @@ namespace eShopApp.Entity.Entities
     /// </summary>
     public class ProductCategory
     {
+        [Key, Column(Order = 0)]
         public int      CategoryID { get; set; }
         public Category Category   { get; set; }
 
+        [Key, Column(Order = 1)]
         public int      ProductID  { get; set; }
         public Product  Product    { get; set; }
     }

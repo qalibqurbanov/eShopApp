@@ -19,6 +19,7 @@ namespace eShopApp.Business.Services.Abstract
         void Delete(Category entity);
 
         /* ICategoryRepository */
-        // ...
+        Category GetByIdWithProducts(int CategoryID);
+        void DeleteProductFromCategory(int ProductID, int CategoryID);
     }
 }

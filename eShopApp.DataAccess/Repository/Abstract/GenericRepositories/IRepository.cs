@@ -17,6 +17,7 @@ namespace eShopApp.DataAccess.Repository.Abstract.GenericRepositories
         List<TEntity> GetAll(bool DisableChangeTracker);
         void Create(TEntity entity);
         void Update(TEntity entity);
+        void Update(TEntity entity, int[] CategoryIDs);
         void Delete(TEntity entity);
     }
 }

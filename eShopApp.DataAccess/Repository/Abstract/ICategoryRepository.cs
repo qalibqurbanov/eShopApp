@@ -13,6 +13,7 @@ namespace eShopApp.DataAccess.Repository.Abstract
     /// </summary>
     public interface ICategoryRepository : IRepository<Category>
     {
-
+        Category GetByIdWithProducts(int CategoryID, bool DisableChangeTracker);
+        void DeleteProductFromCategory(int ProductID, int CategoryID);
     }
 }

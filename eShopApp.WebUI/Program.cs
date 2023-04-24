@@ -1,4 +1,4 @@
-using eShopApp.Business.Extensions.Configurations;
+using eShopApp.WebUI.Extensions.MainConfigurations;
 using eShopApp.DataAccess;
 
 namespace eShopApp.WebUI

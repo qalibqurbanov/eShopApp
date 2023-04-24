@@ -23,7 +23,7 @@ namespace eShopApp.DataAccess.Repository.Concrete
         {
             if (DisableChangeTracker)
             {
-                return _dbContext.Products
+                return DbTable
                         .AsNoTracking()
                         .Where(prod => prod.ProductID == ID)
                         .Include(prod => prod.ProductCategories)
@@ -32,7 +32,7 @@ namespace eShopApp.DataAccess.Repository.Concrete
             }
             else
             {
-                return _dbContext.Products
+                return DbTable
                         .Where(prod => prod.ProductID == ID)
                         .Include(prod => prod.ProductCategories)
                         .ThenInclude(cat => cat.Category)
@@ -135,6 +135,32 @@ namespace eShopApp.DataAccess.Repository.Concrete
             }
 
             return products.ToList();
+        }
+
+        public Product GetByIdWithCategories(int id, bool DisableChangeTracker)
+        {
+            var products = DbTable.AsQueryable();
+
+            if (DisableChangeTracker)
+            {
+                /* Istediyimiz ID-ye sahib mehsulu kateqoriyalari ile birlikde elde edek: */
+
+                products = products
+                    .AsNoTracking()
+                    .Where(prod => prod.ProductID == id)
+                    .Include(prod => prod.ProductCategories)
+                    .ThenInclude(prodCat => prodCat.Category);
+            }
+            else
+            {
+                products = products
+                    .Where(prod => prod.ProductID == id)
+                    .Include(prod => prod.ProductCategories)
+                    .ThenInclude(prodCat => prodCat.Category);
+            }
+
+            
+            return products.FirstOrDefault();
         }
     }
 }

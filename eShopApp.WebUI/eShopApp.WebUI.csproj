@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -9,9 +9,13 @@
 
   <ItemGroup>
     <Compile Remove="Views\Product\**" />
+    <Compile Remove="wwwroot\ckeditor5-inline\**" />
     <Content Remove="Views\Product\**" />
+    <Content Remove="wwwroot\ckeditor5-inline\**" />
     <EmbeddedResource Remove="Views\Product\**" />
+    <EmbeddedResource Remove="wwwroot\ckeditor5-inline\**" />
     <None Remove="Views\Product\**" />
+    <None Remove="wwwroot\ckeditor5-inline\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,6 +30,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

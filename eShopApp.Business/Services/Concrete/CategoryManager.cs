@@ -12,10 +12,7 @@ namespace eShopApp.Business.Services.Concrete
     public class CategoryManager : ICategoryService
     {
         private readonly ICategoryRepository _categoryRepository;
-        public CategoryManager(ICategoryRepository categoryRepository)
-        {
-            this._categoryRepository = categoryRepository;
-        }
+        public CategoryManager(ICategoryRepository categoryRepository) => this._categoryRepository = categoryRepository;
 
         public List<Category> GetAll()
         {
@@ -40,6 +37,16 @@ namespace eShopApp.Business.Services.Concrete
         public void Delete(Category entity)
         {
             _categoryRepository.Delete(entity);
+        }
+
+        public Category GetByIdWithProducts(int CategoryID)
+        {
+            return _categoryRepository.GetByIdWithProducts(CategoryID, true);
+        }
+
+        public void DeleteProductFromCategory(int ProductID, int CategoryID)
+        {
+            _categoryRepository.DeleteProductFromCategory(ProductID, CategoryID);
         }
     }
 }

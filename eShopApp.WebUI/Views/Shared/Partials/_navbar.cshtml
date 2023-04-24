@@ -1,9 +1,34 @@
-﻿<div class="container border-bottom">
-    <nav class="navbar navbar-light justify-content-between bg-transparent">
-        <div class="d-flex flex-row">
-            <a asp-controller="home" asp-action="index" class="nav-item nav-link navbar-brand">Home</a>
-            <a asp-controller="shop" asp-action="list" class="nav-item nav-link navbar-brand">Products</a>
-            <a asp-controller="home" asp-action="about" class="nav-item nav-link navbar-brand">About</a>
-        </div>
-    </nav>
+﻿<div class="navbar bg-transparent border-bottom navbar-expand-sm" style="font-size: 20px;">
+    <div class="container">
+        <a asp-controller="home" asp-action="index" class="navbar-brand text-danger"><i class="fa-solid fa-socks"></i> eShopApp</a>
+
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a asp-controller="shop" asp-action="list" class="nav-link text-primary">Products</a>
+            </li>
+
+            <li class="nav-item">
+                <a href="#" class="nav-link text-primary">Cart</a>
+            </li>
+
+            <li class="nav-item">
+                <a href="#" class="nav-link text-primary">Orders</a>
+            </li>
+
+            <li class="nav-item">
+                <a href="#" class="nav-link text-primary">About</a>
+            </li>
+
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup='true' aria-expanded="false">Management</a>
+
+                <ul class="dropdown-menu">
+                    <li><a asp-controller="admin" asp-action="ProductList" class="dropdown-item text-primary">Product Management</a></li>
+                    <li><a asp-controller="admin" asp-action="CategoryList" class="dropdown-item text-primary">Category Management</a></li>
+
+                    @*<li><hr class="dropdown-divider"></li>*@
+                </ul>
+            </li>
+        </ul>
+    </div>
 </div>

@@ -23,11 +23,11 @@ namespace eShopApp.DataAccess
                 using (ShopDbContext _dbContext = scope.ServiceProvider.GetRequiredService<ShopDbContext>())
                 {
                     /* Test ucun yeni datalar(Category/Product) elave etsen ve ya movcud datalari(Category/Product) deyiwsen gerek DB-ni silib yeniden yaradasan. Datalari(Category/Product) deyiwmeyibse uncomment etme: */
-                    // _dbContext.Database.EnsureDeleted();
+                    _dbContext.Database.EnsureDeleted();
 
                     /* Ilk once - Database yoxdursa yarat: */
-                    // _dbContext.Database.EnsureCreated();
-                    // _dbContext.Database.Migrate();
+                    _dbContext.Database.EnsureCreated();
+                    _dbContext.Database.Migrate();
 
                     /* Icra olunmagi gozleyen migration yoxdursa ve ya migrationlar icra olunub qutariblarsa artiq gozleyen migration yoxdur ve sayi 0-dir demeli: */
                     if (_dbContext.Database.GetPendingMigrations().Count() == 0)

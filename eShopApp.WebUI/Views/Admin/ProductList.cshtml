@@ -1,0 +1,69 @@
+﻿@model ProductListViewModel
+
+<div class="row">
+    <div class="col-md-12 mt-4 text-center">
+        <h1 class="text-info">Products Management</h1>
+    </div>
+
+    <hr />
+
+    <table class="table table-bordered table-striped">
+        <a asp-controller="Admin" asp-action="CreateProduct" class="btn btn-success mb-3"><i class="fa-solid fa-plus"></i> Add Product</a>
+
+        <thead>
+            <tr class="text-success">
+                <td style="width: 50px;" class="text-center">ID</td>
+                <td style="width: 100px;" class="text-center">Image</td>
+                <td class="text-center">Name</td>
+                <td style="width: 80px;" class="text-center">Price</td>
+                <td style="width: 80px;" class="text-center">IsHome</td>
+                <td style="width: 80px;" class="text-center">IsApproved</td>
+                <td style="width: 200px;" class="text-center">Operation</td>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Products.Count == 0)
+            {
+                <tr>
+                    <td colspan="3">
+                        <div class="alert alert-warning">
+                            <h3>No products...</h3>
+                        </div>
+                    </td>
+                </tr>
+            }
+            else
+            {
+                @foreach (Product prod in Model.Products)
+                {
+                    <tr>
+                        <td class="text-center">@prod.ProductID</td>
+                        <td class="text-center"><img src="~/img/ProductImages/@prod.ProductImageName" width="50%"></td>
+                        <td class="text-center">@prod.ProductName</td>
+                        <td class="text-center">@prod.ProductPrice</td>
+                        <td class="text-center">
+                            @if (prod.ProductIsHome) { <i class="fa-solid fa-check"></i> }
+                            else { <i class="fa-solid fa-xmark"></i> }
+                        </td>
+                        <td class="text-center">
+                            @if (prod.ProductIsApproved) { <i class="fa-solid fa-check"></i> }
+                            else { <i class="fa-solid fa-xmark"></i> }
+                        </td>
+                        <td class="text-center">
+                            @* Awagida "asp-" tag helperleri ile dediyim path buna beraberdir: href="/admin/Edit/@prod.ProductID" *@
+                            <a asp-controller="Admin" asp-action="EditProduct" asp-route-id="@prod.ProductID" class="btn btn-primary form-control-sm"><i class="fa-solid fa-pen-to-square"></i> Edit</a>
+
+                            @* "~/admin/deleteproduct/" - silinecek ID-ni action hemin bu awagidaki hidden input-dan yaxalayacaq: *@
+                            <form action="/admin/deleteproduct" method="post" class="d-inline">
+                                @* Her bir form icerisinde sileceyim mehsulun ID-sini saxlayiram userden gizli bir wekilde (ki, form POST olunanda bu ID-nide gonderim actiona): *@
+                                <input type="hidden" name="prodID" value="@prod.ProductID">
+
+                                <button type="submit" class="btn btn-danger form-control-sm"><i class="fa-regular fa-trash-can"></i> Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

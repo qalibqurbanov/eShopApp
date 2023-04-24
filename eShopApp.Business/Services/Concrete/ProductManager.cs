@@ -20,6 +20,11 @@ namespace eShopApp.Business.Services.Concrete
             _productRepository.Update(entity);
         }
 
+        public void Update(Product entity, int[] CategoryIDs)
+        {
+            _productRepository.Update(entity, CategoryIDs);
+        }
+
         public void Create(Product entity)
         {
             _productRepository.Create(entity);
@@ -63,6 +68,11 @@ namespace eShopApp.Business.Services.Concrete
         public List<Product> GetSearchResult(string SearchString)
         {
             return _productRepository.GetSearchResult(SearchString, true);
+        }
+
+        public Product GetByIdWithCategories(int id)
+        {
+            return _productRepository.GetByIdWithCategories(id, true);
         }
     }
 }

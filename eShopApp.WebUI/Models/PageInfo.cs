@@ -1,7 +1,7 @@
 ﻿namespace eShopApp.WebUI.Models
 {
     /// <summary>
-    /// Hazikirki sehife ile elaqeli melumatlari saxlayir.
+    /// Hazikirki sehife ile elaqeli melumatlari temsil edir.
     /// </summary>
     public class PageInfo
     {

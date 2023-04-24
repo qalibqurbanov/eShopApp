@@ -1,0 +1,130 @@
+﻿@model ProductViewModel
+
+<div class="row text-center">
+    <h1 class="text-info">Edit Product</h1>
+</div>
+
+<hr />
+
+<div class="row">
+    <div class="col-md-12">
+        <form asp-controller="Admin" asp-action="EditProduct" method="post" enctype="multipart/form-data">
+            @* type="hidden" atributuna sahib inputlar ve ya bawqa sozle form-un gizli uzvleri, sehifede(View) gizli bir wekilde usere gostermeyerek data saxlamaq ucundur. *@
+
+            @* Bu hidden inputu niye yaratdim? : Editlenecek olan datani View-ya dawiyib uygun inputlara 'ProductViewModel' komeyile veririk. Lakin admin, Editleme sehifesinde datalari editledikde sonra POST etdiyi zaman hansi ID-ye sahib elementi editlediyinide bilmeliyik ve actiona da gondermeliyik. Bu sebeble form post olunanda diger melumatlarla(prod name/desc/price/image) yanawi 'ProductID'-de gonderilecek actiona/servere ve belece Action terefde editlenecek olan mehsul haqqinda lazimi melumatlara sahib olmuw olacayiq, yeni artiq rahatliqla deye bileceyik ki, admin filan ID-ye sahib mehsulun melumatlarini Editledi: *@
+            <input type="hidden" name="ProductID" value="@Model.ProductID" />
+
+            <div class="form-group row mb-2">
+                <label class="col-sm-2 col-form-label" asp-for="ProductName"></label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" asp-for="ProductName">
+                </div>
+            </div>
+
+            <div class="form-group row mb-2">
+                <label class="col-sm-2 col-form-label" asp-for="ProductDescription"></label>
+                <div class="col-sm-10">
+                    <textarea id="descriptionTextarea" class="form-control" asp-for="ProductDescription"></textarea>
+                </div>
+            </div>
+
+            <div class="form-group row mb-2">
+                <label class="col-sm-2 col-form-label" asp-for="ProductPrice"></label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" asp-for="ProductPrice">
+                </div>
+            </div>
+
+            <div class="form-group row mb-2">
+                <label class="col-sm-2 col-form-label" asp-for="ProductIsApproved"></label>
+                <div class="col-sm-10">
+                    <div class="form-check form-switch">
+                        @if (Model.ProductIsApproved == true) { <input class="form-check-input" asp-for="ProductIsApproved" type="checkbox" id="isApproved" checked> }
+                        else { <input class="form-check-input" asp-for="ProductIsApproved" type="checkbox" id="isApproved"> }
+
+                        <label class="form-check-label" asp-for="ProductIsApproved">
+                            <span id="isApprovedText">
+                                @(Model.ProductIsApproved == true ? "Yes" : "No")
+                            </span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row mb-2">
+                <label class="col-sm-2 col-form-label" asp-for="ProductIsHome"></label>
+                <div class="col-sm-10">
+                    <div class="form-check form-switch">
+                        @if (Model.ProductIsHome == true) { <input class="form-check-input" asp-for="ProductIsHome" type="checkbox" id="isHome" checked> }
+                        else { <input class="form-check-input" asp-for="ProductIsHome" type="checkbox" id="isHome"> }
+
+                        <label class="form-check-label" asp-for="ProductIsHome">
+                            <span id="isHomeText">
+                                @(Model.ProductIsHome == true ? "Yes" : "No")
+                            </span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row mb-2">
+                <label class="col-sm-2 col-form-label" asp-for="ProductImageName"></label>
+                <div class="col-sm-10">
+                    @* <input type="hidden" asp-for="ProductImageName"> *@
+
+                    <div class="d-block border text-center bg-light" style="width:fit-content; height:fit-content;">
+                        <p class="h2 lead pt-2">Current:</p>
+                        <img src="~/img/ProductImages/@Model.ProductImageName" width="150" />
+                    </div>
+
+                    <div class="d-block mt-2">
+                        @* Actionda 'IFormFile' komeyile burdan gelen fayli yaxalayacayiq. Diqqet etmek lazimdir ki actionda parametr bu 'name'-de olsun: 'IFormFile imageFile' :ki Model Binding dogru iwlesin: *@
+                        <input type="file" name="imageFile" /> 
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-sm-10 offset-sm-2 d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary">Edit Product</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    const switchIsHome         = document.getElementById("isHome");
+    const switchIsHomeText     = document.getElementById("isHomeText");
+
+    const switchIsApproved     = document.getElementById("isApproved");
+    const switchIsApprovedText = document.getElementById("isApprovedText");
+
+    $(switchIsHome).click(function ()
+    {
+        var isHomeChecked = $(switchIsHome).is(':checked');
+        $(switchIsHomeText).text(isHomeChecked ? 'Yes' : 'No');
+    });
+
+    $(switchIsApproved).click(function ()
+    {
+        var isApprovedChecked = $(switchIsApproved).is(':checked');
+        $(switchIsApprovedText).text(isApprovedChecked ? 'Yes' : 'No');
+    });
+</script>
+
+@section Scripts
+{
+    <script src="~/ckeditor5-classic/ckeditor.js"></script>
+    <script>
+        $(document).ready(function()
+        {
+            ClassicEditor
+                .create(document.querySelector('#descriptionTextarea'), { removePlugins: ['CKFinderUploadAdapter', 'CKFinder', 'EasyImage', 'Image', 'ImageCaption', 'ImageStyle', 'ImageToolbar', 'ImageUpload', 'MediaEmbed', 'Table'] })
+                .catch(error =>
+                {
+                    console.error(error);
+                });
+        });
+    </script>
+}

@@ -16,6 +16,7 @@ namespace eShopApp.Business.Services.Abstract
         List<Product> GetAll();
         void Create(Product entity);
         void Update(Product entity);
+        void Update(Product entity, int[] CategoryIDs);
         void Delete(Product entity);
 
         /* IProductRepository */
@@ -24,5 +25,6 @@ namespace eShopApp.Business.Services.Abstract
         int GetProductCountByCategoryID(int? CategoryID);
         List<Product> GetHomePageProducts();
         List<Product> GetSearchResult(string SearchString);
+        Product GetByIdWithCategories(int id);
     }
 }

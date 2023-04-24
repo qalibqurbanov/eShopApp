@@ -1,0 +1,55 @@
+﻿@model CategoryListViewModel
+
+<div class="row">
+    <div class="col-md-12 mt-4 text-center">
+        <h1 class="text-info">Categories Management</h1>
+    </div>
+
+    <hr />
+
+    <table class="table table-bordered table-striped">
+        <a asp-controller="Admin" asp-action="CreateCategory" class="btn btn-success mb-3"><i class="fa-solid fa-plus"></i> Add Category</a>
+
+        <thead>
+            <tr class="text-success">
+                <td style="width: 50px;" class="text-center">ID</td>
+                <td class="text-center">Name</td>
+                <td style="width: 200px;" class="text-center">Operation</td>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Categories.Count == 0)
+            {
+                <tr>
+                    <td colspan="3">
+                        <div class="alert alert-warning">
+                            <h3>No categories...</h3>
+                        </div>
+                    </td>
+                </tr>
+            }
+            else
+            {
+                @foreach (Category cat in Model.Categories)
+                {
+                    <tr>
+                        <td class="text-center">@cat.CategoryID</td>
+                        <td class="text-center">@cat.CategoryName</td>
+                        <td class="text-center">
+                            @* Awagida "asp-" tag helperleri ile dediyim path buna beraberdir: href="/admin/Edit/@cat.CategoryID" *@
+                            <a asp-controller="Admin" asp-action="EditCategory" asp-route-id="@cat.CategoryID" class="btn btn-primary form-control-sm"><i class="fa-solid fa-pen-to-square"></i> Edit</a>
+
+                            @* "~/admin/deletecategory/" - silinecek ID-ni action hemin bu awagidaki hidden input-dan yaxalayacaq: *@
+                            <form action="/admin/deletecategory/" method="post" class="d-inline">
+                                @* Her bir form icerisinde sileceyim mehsulun ID-sini saxlayiram userden gizli bir wekilde (ki, form POST olunanda bu ID-nide gonderim actiona):: *@
+                                <input type="hidden" name="catID" value="@cat.CategoryID">
+
+                                <button type="submit" class="btn btn-danger form-control-sm"><i class="fa-regular fa-trash-can"></i> Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

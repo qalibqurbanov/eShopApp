@@ -8,7 +8,7 @@ namespace eShopApp.WebUI.Models.ViewModels
     public class ProductListViewModel
     {
         /// <summary>
-        /// View-ya gonderilecek olan mehsul.
+        /// View-ya gonderilecek olan mehsullar.
         /// </summary>
         public List<Product> Products { get; set; }
 
