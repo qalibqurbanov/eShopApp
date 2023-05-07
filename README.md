@@ -4,7 +4,7 @@
 # :building_construction: Proyekt haqqında.
 - Proyekt n-qatlı arxitektura üzərində qurulub. Hər bir qat ierarxiya üzrə özündən bir əvvəlki/sonrakı qat ilə əlaqə qurur (Entity qatı istisna olmaqla, çünki entity siniflərinə ehtiyacı olan hər bir qat Entity qatını referans alıb entity siniflərini istifadə edə bilər), sxem olaraq ifadə etsəm:
 
-![ProyektinStrukturu](https://i.ibb.co/dDfLppD/Proyektin-Strukturu.png)
+> ![ProyektinStrukturu](https://i.ibb.co/dDfLppD/Proyektin-Strukturu.png)
 
-# :sparkles: Demo:
+# :sparkles: Demo.
 > SOON...
