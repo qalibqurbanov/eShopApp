@@ -16,7 +16,7 @@ namespace eShopApp.WebUI.Models.ViewModels
         public string ProductName        { get; set; }
 
         [Required]
-        [Range(double.MinValue, double.MaxValue)]
+        [Range(0, double.MaxValue)]
         [Display(Name = "Price", Prompt = "Enter product price")]
         public double? ProductPrice      { get; set; }
 

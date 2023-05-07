@@ -15,6 +15,30 @@ namespace eShopApp.DataAccess.DatabaseContext
         public DbSet<Category> Categories { get; set; }
         public DbSet<ProductCategory> ProductCategory { get; set; }
 
+        public override int SaveChanges()
+        {
+            var Result = ChangeTracker.Entries<Product>(); /* Ilk once mudaxile edeceyim entity-ni elde edirem */
+
+            foreach (var data in Result)
+            {
+                switch (data.State)
+                {
+                    /* Eger hazirki 'Product' entitysi yaradilibsa ve ya uzerinde deyiwiklik edilibse: */
+                    case EntityState.Added:
+                    case EntityState.Modified:
+                    {
+                            /* Mehsul yaradilanda ve ya uzerinde deyiwiklik edilende mehsul wekli gosterilmeyibse hemin mehsula default wekil verirem: */
+                            if (data.Entity.ProductImageName == null || string.IsNullOrEmpty(data.Entity.ProductImageName))
+                            {
+                                data.Entity.ProductImageName = "DEFAULT.png";
+                            }
+                    } break;
+                }
+            }
+
+            return base.SaveChanges(); /* Son olaraq ise base classdaki esl 'SaveChanges()' iwlesin */
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //modelBuilder.ApplyConfiguration(new ProductConfiguration());
