@@ -9,19 +9,33 @@ namespace eShopApp.WebUI.Models.ViewModels
     public class ProductViewModel
     {
         public int    ProductID          { get; set; }
-        [Display(Name = "Name:", Prompt = "Enter product name")]
+
+        [Required]
+        [StringLength(maximumLength:50, MinimumLength = 3)]
+        [Display(Name = "Name", Prompt = "Enter product name")]
         public string ProductName        { get; set; }
-        [Display(Name = "Price:", Prompt = "Enter product price")]
-        public double ProductPrice       { get; set; }
-        [Display(Name = "Description:", Prompt = "Enter product description")]
+
+        [Required]
+        [Range(double.MinValue, double.MaxValue)]
+        [Display(Name = "Price", Prompt = "Enter product price")]
+        public double? ProductPrice      { get; set; }
+
+        [Required]
+        [Display(Name = "Description", Prompt = "Enter product description")]
         public string ProductDescription { get; set; }
-        public string ProductImageName   { get; set; }
-        [Display(Name = "Is product approved:")]
+
+        [Display(Name = "Product Image")]
+        public string? ProductImageName  { get; set; }
+
+        [Display(Name = "Is product approved")]
         public bool ProductIsApproved    { get; set; }
-        [Display(Name = "Show on homepage:")]
+
+        [Display(Name = "Show on homepage")]
         public bool ProductIsHome        { get; set; }
-    
+
         /* Adini 'SelectedCategories' ona gore qoymuwam ki sehifede bu kolleksiya komeile iwareliyecem checkboxlari, yeni bu kolleksiya - mehsulun hansi kateqoriyalara aid olmasindan elave hemde hansi kateqoriyalarin secileceyinide ifade edir: */
         public List<Category> SelectedCategories { get; set; }
     }
 }
+
+/* Yuxarida Data Annotation-lar ile teleb etdiyim validasiya qaydalarini gedib 'Product' sinifinin ozunde yazmagim dogru olmazdi - cunki 'Entity' qatini tek 'UI' qati iwletmeyecek ve hemin bu diger qatlarda 'Product' ferqli meqsedlerle iwledile biler - sebeb budur. */

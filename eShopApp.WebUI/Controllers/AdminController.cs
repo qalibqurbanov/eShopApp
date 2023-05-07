@@ -37,31 +37,45 @@ namespace eShopApp.WebUI.Controllers
         [HttpGet]
         public IActionResult CreateProduct()
         {
+            /* User mehsul yaratma sehifesine girende gerek DB-dan kateqoriyalari elde ederek View-ya gonderim, cunki hemin kateqoriyalar esasinda checkboxlar yaradacam. Burada yaradacagim Checkboxlar ucun hansi kateqoriyalari iwledeceyimi set edirem, yeni burada checkboxlari hansi kateqoriyalar esasinda yaradacagimi paketleyib gonderirem 'CreateProduct' sehifesine. Qisaca, DB-daki butun kateqoriyalari View-ya dawiyacam ve hemin bu kateqoriyalari View-da checkbox olaraq yaradacam (isteseydim 'ViewBag.Categories'-i 'ProductViewModel' sinifi icerisinde bir kolleksiya olaraq yarada ve o curde dawiya bilerdim): */
+            ViewData["Categories"] = _categoryService.GetAll();
+
             return View();
         }
 
         [HttpPost]
-        public IActionResult CreateProduct([FromForm] ProductViewModel productVM, [FromForm] IFormFile imageFile)
+        public IActionResult CreateProduct([FromForm] ProductViewModel productVM, [FromForm] int[] catIDs, [FromForm] IFormFile imageFile)
         {
-            Product product = _mapper.Map<Product>(productVM);
-            if (imageFile != null)
+            if(ModelState.IsValid)
             {
-                /* Faylin ozunu yerlewdirirem 'Web Root (wwwroot)' papkasina: */
-                imageFile.MoveFormFile(_environment.WebRootPath, out string imageName);
+                Product product = _mapper.Map<Product>(productVM);
+                if (imageFile != null)
+                {
+                    /* Faylin ozunu yerlewdirirem 'Web Root (wwwroot)' papkasina: */
+                    imageFile.MoveFormFile(_environment.WebRootPath, out string imageName);
 
-                /* Daha sonra ise hemin faylin adini qeyd edirem DB-ya: */
-                product.ProductImageName = imageName;
+                    /* Daha sonra ise hemin faylin adini qeyd edirem DB-ya: */
+                    product.ProductImageName = imageName;
+                }
+
+                _productService.Create(product, catIDs);
+
+                TempData.Set<AlertMessage>("InformationalMessage", new AlertMessage()
+                {
+                    alertMessage = $"You have successfully created a new product with name: \"{product.ProductName}\"!",
+                    alertType = AlertMessage.AlertType.success
+                });
+
+                return RedirectToAction(nameof(ProductList)); /* Yeni bir mehsul elave olunduqdan sonra admin qalmasin mehsul elave etme sehifesinde, onun yerine admini yonlendirek mehsul siyahisi sehifesine */
             }
-
-            _productService.Create(product);
-
-            TempData.Set<AlertMessage>("InformationalMessage", new AlertMessage()
+            else
             {
-                alertMessage = $"You have successfully created a new product with name: \"{product.ProductName}\"!",
-                alertType = AlertMessage.AlertType.success
-            });
+                /* Eger inputplara/modele gelen data validasiyadan kece bilmese demeli xeta var ve bu zaman useri qaytariram mehsul yaratma sehifesine ve hemin sehifede hemde DB-dan kateqoriyalari elde ederek hemin kateqoriyalarin her biri ucun Checkbox yaradiram. Burada yaradacagim Checkboxlar ucun hansi kateqoriyalari iwledeceyimi set edirem, yeni burada checkboxlari hansi kateqoriyalar esasinda yaradacagimi paketleyib gonderirem 'CreateProduct' sehifesine. Qisaca, DB-daki butun kateqoriyalari View-ya dawiyacam ve hemin bu kateqoriyalari View-da checkbox olaraq yaradacam (isteseydim 'ViewBag.Categories'-i 'ProductViewModel' sinifi icerisinde bir kolleksiya olaraq yarada ve o curde dawiya bilerdim): */
+                ViewData["Categories"] = _categoryService.GetAll();
 
-            return RedirectToAction(nameof(ProductList)); /* Yeni bir mehsul elave olunduqdan sonra admin qalmasin mehsul elave etme sehifesinde, onun yerine admini yonlendirek mehsul siyahisi sehifesine */
+                /* Eger inputplara/modele gelen data validasiyadan kece bilmese demeli xeta var ve bu zaman useri qaytariram mehsul yaratma sehifesine ve xetali daxil etmiw oldugu modelide gonderirem hemin sehifeye. Sehifede ise inputlar bu modele 'asp-for' ile bindlenmiw oldugu ucun (ve belece 'asp-for' 'id,name ve s.'-dan bawqa input ucun 'value=@Model.PropertyName' atributunuda generasiya edecek deye) problemsiz bir wekilde uygun inputlarda userin daxil etmiw oldugu melumatlar(productVM) yazilacaq ve xetali inputlarin yanindada ('asp-validation-for' sayesinde) uygun xeta mesaji: */
+                return View(productVM);
+            }
         }
 
         [HttpGet]
@@ -85,7 +99,7 @@ namespace eShopApp.WebUI.Controllers
             productVM.SelectedCategories = product.ProductCategories.Select(prod => prod.Category).ToList();
 
             /* DB-daki butun kateqoriyalari View-ya dawiyacam ve hemin bu kateqoriyalari checkbox olaraq yaradacam (isteseydim 'ProductViewModel' icerisinde bir kolleksiya olaraq yarada ve o curde dawiya bilerdim): */
-            ViewBag.Categories = _categoryService.GetAll();
+            ViewData["Categories"] = _categoryService.GetAll();
 
             return View(productVM);
         }
@@ -95,32 +109,41 @@ namespace eShopApp.WebUI.Controllers
             /* 'catIDs' - yaranacaq olan 'Switch' kontrollarinin 'name'-i esasinda yaxalanacaq 'value'-lari */
             /* 'imageFile' - form-dan post olunan wekli yaxalayacaq, diqqet etmek lazimdir ki: "input type="file" :olan inputun 'name'-i ile buradaki parametrin adi eyni olsun (ki Model Binding dogru iwlesin) */
         {
-            Product product = _productService.GetByID(productVM.ProductID);
-
-            if(product == null)
+            if (ModelState.IsValid)
             {
-                return NotFound();
+                Product product = _productService.GetByID(productVM.ProductID);
+
+                if (product == null)
+                {
+                    return NotFound();
+                }
+
+                product = _mapper.Map<Product>(productVM);
+                if (imageFile != null)
+                {
+                    /* Faylin ozunu yerlewdirirem 'Web Root (wwwroot)' papkasina: */
+                    imageFile.MoveFormFile(_environment.WebRootPath, out string imageName);
+
+                    /* Daha sonra ise hemin faylin adini qeyd edirem DB-ya: */
+                    product.ProductImageName = imageName;
+                }
+
+                _productService.Update(product, catIDs);
+
+                TempData.Set<AlertMessage>("InformationalMessage", new AlertMessage()
+                {
+                    alertMessage = $"You have successfully edited a product with name: \"{product.ProductName}\"!",
+                    alertType = AlertMessage.AlertType.info
+                });
+
+                return RedirectToAction(nameof(ProductList)); /* Mehsul editlendikden sonra admin qalmasin mehsul editleme sehifesinde, onun yerine admini yonlendirek mehsul siyahisi sehifesine */
             }
-
-            product = _mapper.Map<Product>(productVM);
-            if (imageFile != null)
+            else
             {
-                /* Faylin ozunu yerlewdirirem 'Web Root (wwwroot)' papkasina: */
-                imageFile.MoveFormFile(_environment.WebRootPath, out string imageName);
-
-                /* Daha sonra ise hemin faylin adini qeyd edirem DB-ya: */
-                product.ProductImageName = imageName;
+                /* Eger inputplara/modele gelen data validasiyadan kece bilmese demeli xeta var ve bu zaman useri qaytariram mehsul editleme sehifesine ve xetali daxil etmiw oldugu modelide gonderirem hemin sehifeye. Sehifede ise inputlar bu modele 'asp-for' ile bindlenmiw oldugu ucun (ve belece 'asp-for' 'id,name ve s.'-dan bawqa input ucun 'value=@Model.PropertyName' atributunuda generasiya edecek deye) problemsiz bir wekilde uygun inputlarda userin daxil etmiw oldugu melumatlar(productVM) yazilacaq ve xetali inputlarin yanindada ('asp-validation-for' sayesinde) uygun xeta mesaji: */
+                return View(productVM);
             }
-
-            _productService.Update(product, catIDs);
-
-            TempData.Set<AlertMessage>("InformationalMessage", new AlertMessage()
-            {
-                alertMessage = $"You have successfully edited a product with name: \"{product.ProductName}\"!",
-                alertType = AlertMessage.AlertType.info
-            });
-
-            return RedirectToAction(nameof(ProductList)); /* Mehsul editlendikden sonra admin qalmasin mehsul editleme sehifesinde, onun yerine admini yonlendirek mehsul siyahisi sehifesine */
+            
         }
 
         [HttpPost]
@@ -170,17 +193,25 @@ namespace eShopApp.WebUI.Controllers
         [HttpPost]
         public IActionResult CreateCategory([FromForm] CategoryViewModel categoryVM)
         {
-            Category category = _mapper.Map<Category>(categoryVM);
-
-            _categoryService.Create(category);
-
-            TempData.Set<AlertMessage>("InformationalMessage", new AlertMessage()
+            if(ModelState.IsValid)
             {
-                alertMessage = $"You have successfully created a new category with name: \"{category.CategoryName}\"!",
-                alertType = AlertMessage.AlertType.success
-            });
+                Category category = _mapper.Map<Category>(categoryVM);
 
-            return RedirectToAction(nameof(CategoryList)); /* Yeni bir kateqoriya elave olunduqdan sonra admin qalmasin kateqoriya elave etme sehifesinde, onun yerine admini yonlendirek kateqoriya siyahisi sehifesine */
+                _categoryService.Create(category);
+
+                TempData.Set<AlertMessage>("InformationalMessage", new AlertMessage()
+                {
+                    alertMessage = $"You have successfully created a new category with name: \"{category.CategoryName}\"!",
+                    alertType = AlertMessage.AlertType.success
+                });
+
+                return RedirectToAction(nameof(CategoryList)); /* Yeni bir kateqoriya elave olunduqdan sonra admin qalmasin kateqoriya elave etme sehifesinde, onun yerine admini yonlendirek kateqoriya siyahisi sehifesine */
+            }
+            else
+            {
+                /* Eger inputplara/modele gelen data validasiyadan kece bilmese demeli xeta var ve bu zaman useri qaytariram kateqoriya yaratma sehifesine ve xetali daxil etmiw oldugu modelide gonderirem hemin sehifeye. Sehifede ise inputlar bu modele 'asp-for' ile bindlenmiw oldugu ucun (ve belece 'asp-for' 'id,name ve s.'-dan bawqa input ucun 'value=@Model.PropertyName' atributunuda generasiya edecek deye) problemsiz bir wekilde uygun inputlarda userin daxil etmiw oldugu melumatlar(categoryVM) yazilacaq ve xetali inputlarin yanindada ('asp-validation-for' sayesinde) uygun xeta mesaji: */
+                return View(categoryVM);
+            }
         }
 
         [HttpGet]
@@ -209,24 +240,32 @@ namespace eShopApp.WebUI.Controllers
         [HttpPost]
         public IActionResult EditCategory([FromForm] CategoryViewModel categoryVM)
         {
-            Category category = _categoryService.GetByID(categoryVM.CategoryID);
-
-            if (category == null)
+            if(ModelState.IsValid)
             {
-                return NotFound();
+                Category category = _categoryService.GetByID(categoryVM.CategoryID);
+
+                if (category == null)
+                {
+                    return NotFound();
+                }
+
+                category = _mapper.Map<Category>(categoryVM);
+
+                _categoryService.Update(category);
+
+                TempData.Set<AlertMessage>("InformationalMessage", new AlertMessage()
+                {
+                    alertMessage = $"You have successfully edited a category with name: \"{category.CategoryName}\"!",
+                    alertType = AlertMessage.AlertType.info
+                });
+
+                return RedirectToAction(nameof(CategoryList)); /* Kateqoriya editlendikden sonra admin qalmasin kateqoriya editleme sehifesinde, onun yerine admini yonlendirek kateqoriya siyahisi sehifesine */
             }
-
-            category = _mapper.Map<Category>(categoryVM);
-
-            _categoryService.Update(category);
-
-            TempData.Set<AlertMessage>("InformationalMessage", new AlertMessage()
+            else
             {
-                alertMessage = $"You have successfully edited a category with name: \"{category.CategoryName}\"!",
-                alertType = AlertMessage.AlertType.info
-            });
-
-            return RedirectToAction(nameof(CategoryList)); /* Kateqoriya editlendikden sonra admin qalmasin kateqoriya editleme sehifesinde, onun yerine admini yonlendirek kateqoriya siyahisi sehifesine */
+                /* Eger inputplara/modele gelen data validasiyadan kece bilmese demeli xeta var ve bu zaman useri qaytariram kateqoriya editleme sehifesine ve xetali daxil etmiw oldugu modelide ('EditProduct' sehifesinde hidden inputlardan elde etdiyim hazirda editlemeye caliwdigim kateqoriyaya aid mehsullar ile birlikde) gonderirem hemin sehifeye (mehsullari niye gonderirem? - kateqoriya editleme sehifesinde hemde editlemeye caliwdigim kateqoriyaya aid mehsullarida siralayiram, bu sebeble viewya yanliw daxil edilmiw form datalari ile yanawi hemde hemin kateqoriyaya aid olan 'Product'-larida gondermeliyem). Sehifede ise inputlar bu modele 'asp-for' ile bindlenmiw oldugu ucun (ve belece 'asp-for' 'id,name ve s.'-dan bawqa input ucun 'value=@Model.PropertyName' atributunuda generasiya edecek deye) problemsiz bir wekilde uygun inputlarda userin daxil etmiw oldugu melumatlar(categoryVM) yazilacaq ve xetali inputlarin yanindada ('asp-validation-for' sayesinde) uygun xeta mesaji: */
+                return View(categoryVM);
+            }
         }
 
         [HttpPost]

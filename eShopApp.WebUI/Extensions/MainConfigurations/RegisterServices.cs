@@ -31,7 +31,7 @@ namespace eShopApp.WebUI.Extensions.MainConfigurations
             });
 
             serviceCollection.AddControllersWithViews()
-                             .AddRazorRuntimeCompilation();
+                .AddRazorRuntimeCompilation();
 
             serviceCollection.AddRazorPages();
         }

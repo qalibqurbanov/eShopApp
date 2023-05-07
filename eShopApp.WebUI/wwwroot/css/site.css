@@ -3,10 +3,15 @@ html
   font-size: 14px;
 }
 
-.navbar-nav > li > a:hover
+.navbar-nav li a:hover
 {
     background-color:rgb(13,110,253);
     color: white !important;
+}
+
+.navbar-nav li ul li a:active
+{
+    color: white;
 }
 
 .fa-check

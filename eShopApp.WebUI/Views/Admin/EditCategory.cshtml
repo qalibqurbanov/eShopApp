@@ -8,7 +8,11 @@
     <hr />
 
     <div class="col-md-4">
-        <form asp-controller="Admin" asp-action="EditCategory" method="post">
+        <form asp-controller="Admin" asp-action="EditCategory" method="post" enctype="multipart/form-data">
+            @*<div>
+                <div asp-validation-summary="All" class="text-danger"></div>
+            </div>*@
+
             @* type="hidden" atributuna sahib inputlar ve ya bawqa sozle form-un gizli uzvleri, sehifede(View) gizli bir wekilde usere gostermeyerek data saxlamaq ucundur. *@
 
             @* Bu hidden inputu niye yaratdim? : Editlenecek olan datani View-ya dawiyiriq 'CategoryViewModel' komeyile. Lakin, admin Editleme sehifesinde datalari editledikde sonra POST etdiyi zaman hansi ID-ye sahib elementi editlediyinide bilmeli ve actionada gondermeliyik. Bu sebeble form post olunanda diger melumatlarla(cat name) yanawi 'CategoryID'-de gonderilecek ve belece Action terefde editlenecek olan kateqoriya haqqinda lazimi melumatlara sahib olmuw olacayiq, yeni artiq rahatliqla deye bileceyik ki, admin filan ID-ye sahib kateqoriyanin melumatlarini Editledi: *@
@@ -18,6 +22,7 @@
                 <label class="col-sm-2 col-form-label" asp-for="CategoryName"></label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" asp-for="CategoryName">
+                    <span asp-validation-for="CategoryName" class="text-danger"></span>
                 </div>
             </div>
 
@@ -26,13 +31,41 @@
                     <button type="submit" class="btn btn-primary">Edit Category</button>
                 </div>
             </div>
+
+            @*
+                * 'products' id-li bu divi daha seliqeli olardi ki awagidaki cedvel daxilinde "@if (Model.Products.Count == 0)" werti daxilinde, xaricinde ve s. yazim. Lakin, hemin bu hidden inputlarin value-lari actiona gonderilmelidir POST sorgusu ile bir yerde - bu sebeble form daxilinde yazmali idim (ki, form POST olunanda hemin bu hidden inputlardaki deyerlerde actiona gonderilsin).
+
+                * POST sorgusu ile birlikde actiona, inputlara daxil edilmiw kateqoriya melumatlariyla(CategoryName) yanawi hemin kateqoriyaya aid mehsullari awagidaki hidden inputlar komeyile gonderirem (ki, action terefde viewdan gelmiw olan model, validasiyadan ugurla kece bilmese ozunde kateqoriya ve hemin kateqoriyaya aid mehsullari saxlayan 'categoryVM' viewya gonderim):
+            *@
+            <div id="products">
+                @* Hazirki kateqoriyada mehsul varsa dovr et: *@
+                @if(@Model.Products != null)
+                {
+                    @if (@Model.Products.Count > 0)
+                    {
+                        @* Hazirki kateqoriyaya aid ne qeder mehsul varsa o qeder dovr edirem, cunki her birini actiona gonderecem (her ehtimala qarwi ki eger actiona getmiw model validasiyadan ugurla kece bilmese yeniden xetali inputlari ve hazirki kateqoriyada olan mehsullari cedvelde siralamaq ucun view-ya gonderim) ve bu sebeble gerek her bir mehsulu yerlewdirem hidden inputa (ki, POST sorgusu ile birlikde gonderilsin actiona): *@
+                        @for (int i = 0; i < Model.Products.Count; i++)
+                        {
+                            @* Kateqoriya editleme sehifesindeki cedvelde, mehsulun yalniz 4 dene melumatini gosterirem deye, mehsulun yalniz hemin 4 melumatini yerlewdirirem 4 ferqli hidden inputlara: *@
+                            <input type="hidden" name="Products[@i].ProductID" value="@Model.Products[i].ProductID">
+                            <input type="hidden" name="Products[@i].ProductImageName" value="@Model.Products[i].ProductImageName">
+                            <input type="hidden" name="Products[@i].ProductName" value="@Model.Products[i].ProductName">
+                            <input type="hidden" name="Products[@i].ProductCategories" value="@Model.Products[i].ProductCategories">
+                            <input type="hidden" name="Products[@i].ProductDescription" value="@Model.Products[i].ProductDescription">
+                            <input type="hidden" name="Products[@i].ProductIsApproved" value="@Model.Products[i].ProductIsApproved.ToString()"> @* bool tipli datani yerlewdire bilmek ucun gerek 'ToString()' deyim *@
+
+                            @* ve belece form POST olunanda 'CategoryViewModel' icerisindeki Products listine buradaki uygun hidden inputlar verilecek *@
+                        }
+                    }
+                }
+            </div>
         </form>
     </div>
 
     <div class="col-md-8 border">
         <div class="row">
             <div class="col-md-12 mt-4 text-center">
-                <h1 class="text-info">Products in "@Model.CategoryName" category:</h1>
+                <h1 class="text-info">Products in this category:</h1> @* this = "@Model.CategoryName" *@
             </div>
 
             <hr />
@@ -43,39 +76,57 @@
                         <td style="width: 50px;" class="text-center">ID</td>
                         <td style="width: 100px;" class="text-center">Image</td>
                         <td class="text-center">Name</td>
+                        <td style="width: 50px;" class="text-center">IsApproved</td>
                         <td style="width: 200px;" class="text-center">Operation</td>
                     </tr>
                 </thead>
                 <tbody>
-                    @if (Model.Products.Count == 0)
+                    @if(@Model.Products != null)
+                    {
+                        @if (@Model.Products.Count == 0)
+                        {
+                            <tr>
+                                <td colspan="5">
+                                    <div class="alert alert-warning">
+                                        <h3>No Products...</h3>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                        else
+                        {
+                            @foreach (Product prod in Model.Products)
+                            {
+                                <tr>
+                                    <td class="text-center">@prod.ProductID</td>
+                                    <td class="text-center"><img src="~/img/ProductImages/@prod.ProductImageName" width="50%"></td>
+                                    <td class="text-center">@prod.ProductName</td>
+                                    <td class="text-center">
+                                        @if (prod.ProductIsApproved) { <i class="fa-solid fa-check"></i> }
+                                        else { <i class="fa-solid fa-xmark"></i> }
+                                    </td>
+                                    <td class="text-center">
+                                        <form action="/admin/deleteproductfromcategory" method="post" class="d-inline-block mt-2">
+                                            @* Her bir form icerisinde sileceyim mehsulun ID-sini saxlayiram userden gizli bir wekilde (ki, form POST olunanda bu ID-nide gonderim actiona): *@
+                                            <input type="hidden" name="prodID" value="@prod.ProductID">
+                                            <input type="hidden" name="catID" value="@Model.CategoryID">
+
+                                            <button type="submit" class="btn btn-danger form-control-sm"><i class="fa-regular fa-trash-can"></i> Delete from this category</button> @* this = "@Model.CategoryName" *@
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    }
+                    else
                     {
                         <tr>
-                            <td colspan="4">
+                            <td colspan="5">
                                 <div class="alert alert-warning">
                                     <h3>No Products...</h3>
                                 </div>
                             </td>
                         </tr>
-                    }
-                    else
-                    {
-                        @foreach (Product prod in Model.Products)
-                        {
-                            <tr>
-                                <td class="text-center">@prod.ProductID</td>
-                                <td class="text-center"><img src="~/img/ProductImages/@prod.ProductImageName" width="50%"></td>
-                                <td class="text-center">@prod.ProductName</td>
-                                <td class="text-center">
-                                    <form action="/admin/deleteproductfromcategory" method="post" class="d-inline-block mt-2">
-                                        @* Her bir form icerisinde sileceyim mehsulun ID-sini saxlayiram userden gizli bir wekilde (ki, form POST olunanda bu ID-nide gonderim actiona): *@
-                                        <input type="hidden" name="prodID" value="@prod.ProductID">
-                                        <input type="hidden" name="catID" value="@Model.CategoryID">
-
-                                        <button type="submit" class="btn btn-danger form-control-sm"><i class="fa-regular fa-trash-can"></i> Delete from "@Model.CategoryName" category</button>
-                                    </form>
-                                </td>
-                            </tr>
-                        }
                     }
                 </tbody>
             </table>

@@ -15,6 +15,7 @@ namespace eShopApp.Business.Services.Abstract
         Product GetByID(int ID);
         List<Product> GetAll();
         void Create(Product entity);
+        void Create(Product entity, int[] CategoryIDs);
         void Update(Product entity);
         void Update(Product entity, int[] CategoryIDs);
         void Delete(Product entity);

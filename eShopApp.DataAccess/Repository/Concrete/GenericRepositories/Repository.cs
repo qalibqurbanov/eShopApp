@@ -127,5 +127,30 @@ namespace eShopApp.DataAccess.Repository.Concrete.GenericRepositories
 
             _dbContext.SaveChanges();
         }
+
+
+        public void Create(TEntity entity, int[] CategoryIDs)
+        {
+            if (entity is Product prod)
+            {
+                if (prod != null)
+                {
+                    prod.ProductCategories = CategoryIDs.Select(catID => new ProductCategory()
+                    {
+                        /* Burada mehsulun kateqoriyalarini set edirik. 'CategoryIDs' massivinden elde etdiyimiz her bir ID esasinda yeni bir 'ProductCategory' obyekti yaradaraq veririk 'List<ProductCategory> ProductCategories' kolleksiyasina. Netice olaraq 'ProductCategories' ozunde mehsulun kateqoriyalarini saxlamiw olacaq: */
+
+                        ProductID = prod.ProductID,
+                        CategoryID = catID
+                    }).ToList();
+
+                    Create(prod as TEntity);
+
+                    _dbContext.SaveChanges();
+                }
+            }
+
+
+            _dbContext.SaveChanges();
+        }
     }
 }

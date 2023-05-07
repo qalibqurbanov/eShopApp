@@ -9,7 +9,10 @@ namespace eShopApp.WebUI.Models.ViewModels
     public class CategoryViewModel
     {
         public int CategoryID         { get; set; }
-        [Display(Name = "Name:", Prompt = "Enter category name")]
+
+        [Required]
+        [StringLength(maximumLength: 50, MinimumLength = 3)]
+        [Display(Name = "Name", Prompt = "Enter category name")]
         public string CategoryName    { get; set; }
 
         /// <summary>

@@ -20,14 +20,18 @@ namespace eShopApp.WebUI.Extensions.Helpers
             /* Faylin ozunu yerlewdirirem 'Web Root (wwwroot)' papkasina: */
             string targetPath = Path.Combine(WebRootPath, "img\\ProductImages");
 
+            /* Ilk once metoddan cole gondereceyimiz wekil adini temizleyirem: */
             imageName = string.Empty;
 
+            /* Eyni adli wekil hedef pathde movcuddursa, weklin adini editleyecem: */
             if (File.Exists(Path.Combine(targetPath, imageFile.FileName)))
             {
-                imageName = $"{imageName}-{new Random().Next(100, 1000000)}{DateTime.Now.Ticks}";
+                /* {FaylinUzantisizEslAdi}-_-image{RandomReqem}{HazirkiTick}{FaylinUzantisi} */
+                imageName = $"{imageFile.FileName.Remove(imageFile.FileName.LastIndexOf('.'))}-_-image{new Random().Next(100, int.MaxValue)}{DateTime.Now.Ticks}{Path.GetExtension(imageFile.FileName)}";
             }
             else
             {
+                /* {FaylinEslAdiUzantisiIleBirlikde} */
                 imageName = imageFile.FileName;
             }
 

@@ -30,6 +30,11 @@ namespace eShopApp.Business.Services.Concrete
             _productRepository.Create(entity);
         }
 
+        public void Create(Product entity, int[] CategoryIDs)
+        {
+            _productRepository.Create(entity, CategoryIDs);
+        }
+
         public void Delete(Product entity)
         {
             _productRepository.Delete(entity);
