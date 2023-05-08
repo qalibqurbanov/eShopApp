@@ -1,5 +1,4 @@
-﻿
-namespace eShopApp.Entity.Entities
+﻿namespace eShopApp.Entity.Entities
 {
     /// <summary>
     /// Her bir mehsulu temsil eden model sinifi.

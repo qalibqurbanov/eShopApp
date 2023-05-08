@@ -27,14 +27,35 @@ namespace eShopApp.DataAccess.Repository.Concrete.GenericRepositories
 
         private DbSet<TEntity> DbTable => _dbContext.Set<TEntity>();
 
-        public List<TEntity> GetAll(bool DisableChangeTracker)
+        public void Create(TEntity entity)
         {
-            return DbTable.ToList();
+            DbTable.Add(entity);
+
+            _dbContext.SaveChanges();
         }
 
-        public TEntity GetByID(int ID, bool DisableChangeTracker)
+        public void Create(TEntity entity, int[] CategoryIDs)
         {
-            return DbTable.Find(ID);
+            if (entity is Product prod)
+            {
+                if (prod != null)
+                {
+                    prod.ProductCategories = CategoryIDs.Select(catID => new ProductCategory()
+                    {
+                        /* Burada mehsulun kateqoriyalarini set edirik. 'CategoryIDs' massivinden elde etdiyimiz her bir ID esasinda yeni bir 'ProductCategory' obyekti yaradaraq veririk 'List<ProductCategory> ProductCategories' kolleksiyasina. Netice olaraq 'ProductCategories' ozunde mehsulun kateqoriyalarini saxlamiw olacaq: */
+
+                        ProductID = prod.ProductID,
+                        CategoryID = catID
+                    }).ToList();
+
+                    Create(prod as TEntity);
+
+                    _dbContext.SaveChanges();
+                }
+            }
+
+
+            _dbContext.SaveChanges();
         }
 
         public void Update(TEntity entity)
@@ -65,7 +86,7 @@ namespace eShopApp.DataAccess.Repository.Concrete.GenericRepositories
                 _dbContext.SaveChanges();
             }
 
-            else if(entity is Category cat)
+            else if (entity is Category cat)
             {
                 /* Change Tracker terefinden izlenilmekde olan diger 'Category' entity-sini elde edek. Bunun ucun in-memory-de movcud olan(bir baxima cachelenmiwde deye bilerik) 'Category' entitylerinden lazimi ID-ye sahib 'Category'-ni tapib cixariram (tapib cixarmaq ucun gorunduyu kimi - in-memorydeki kewlenmiw 'Category' ile 'Update()' metoduna gelmiw 'Category'-ni qarwilawdiriram): */
                 Category? category = _dbContext.Set<Category>()
@@ -121,36 +142,14 @@ namespace eShopApp.DataAccess.Repository.Concrete.GenericRepositories
             _dbContext.SaveChanges();
         }
 
-        public void Create(TEntity entity)
+        public List<TEntity> GetAll(bool DisableChangeTracker)
         {
-            DbTable.Add(entity);
-
-            _dbContext.SaveChanges();
+            return DbTable.ToList();
         }
 
-
-        public void Create(TEntity entity, int[] CategoryIDs)
+        public TEntity GetByID(int ID, bool DisableChangeTracker)
         {
-            if (entity is Product prod)
-            {
-                if (prod != null)
-                {
-                    prod.ProductCategories = CategoryIDs.Select(catID => new ProductCategory()
-                    {
-                        /* Burada mehsulun kateqoriyalarini set edirik. 'CategoryIDs' massivinden elde etdiyimiz her bir ID esasinda yeni bir 'ProductCategory' obyekti yaradaraq veririk 'List<ProductCategory> ProductCategories' kolleksiyasina. Netice olaraq 'ProductCategories' ozunde mehsulun kateqoriyalarini saxlamiw olacaq: */
-
-                        ProductID = prod.ProductID,
-                        CategoryID = catID
-                    }).ToList();
-
-                    Create(prod as TEntity);
-
-                    _dbContext.SaveChanges();
-                }
-            }
-
-
-            _dbContext.SaveChanges();
+            return DbTable.Find(ID);
         }
     }
 }

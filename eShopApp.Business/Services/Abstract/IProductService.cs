@@ -3,21 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using eShopApp.Business.Validation.Abstract;
 using eShopApp.DataAccess.Repository.Abstract;
 using eShopApp.DataAccess.Repository.Abstract.GenericRepositories;
 using eShopApp.Entity.Entities;
 
 namespace eShopApp.Business.Services.Abstract
 {
-    public interface IProductService
+    public interface IProductService : IValidator<Product>
     {
         /* IRepository */
         Product GetByID(int ID);
         List<Product> GetAll();
-        void Create(Product entity);
-        void Create(Product entity, int[] CategoryIDs);
-        void Update(Product entity);
-        void Update(Product entity, int[] CategoryIDs);
+        bool Create(Product entity);
+        bool Create(Product entity, int[] CategoryIDs);
+        bool Update(Product entity);
+        bool Update(Product entity, int[] CategoryIDs);
         void Delete(Product entity);
 
         /* IProductRepository */

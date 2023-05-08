@@ -44,8 +44,7 @@
                     {
                         @foreach (Category category in (List<Category>)ViewData["Categories"])
                         {
-                            /* 1. Ilk once DB-da olan butun kateqoriyalara qarwiliq bir 'Switch' kontrolu yaradiriq. */
-                            /* 2. Her switch kontrolu yaradanda yoxlayiriq - eger DB-dan elde etdiyimiz hazirki kateqoriya('category') mehsulun kateqoriyalarindan her hansi birine beraberdirse demeli hazirki yaranacaq olan 'Switch' kontrol iwarelenerek('ON' - checked) yaradilmalidir, cunki mehsul hazirki kateqoriyada var. */
+                            /* Burada DB-da olan butun kateqoriyalara qarwiliq bir 'Switch' kontrolu yaradiriq. */
 
                             <div class="form-check form-switch">
                                 @* Checkboxun ozu: *@

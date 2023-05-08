@@ -1,5 +1,4 @@
-﻿using System.Net;
-using AutoMapper;
+﻿using AutoMapper;
 using eShopApp.Business.Services.Abstract;
 using eShopApp.Entity.Entities;
 using eShopApp.WebUI.Extensions.Helpers;
@@ -23,6 +22,17 @@ namespace eShopApp.WebUI.Controllers
             this._environment = environment;
             this._mapper = mapper;
         }
+
+        #region Mehsul/Kateqoriya uzerinde reallawdirilmiw emeliyyat barede usere sehifenin ust hissesinde gostereceyimiz mesaji set eden komekci mini metod.
+        private void CreateInformationalMessage(string AlertMessage, AlertMessage.AlertType AlertType)
+        {
+            TempData.Set<AlertMessage>("InformationalMessage", new AlertMessage()
+            {
+                alertMessage = AlertMessage,
+                alertType = AlertType
+            });
+        }
+        #endregion Mehsul/Kateqoriya uzerinde reallawdirilmiw emeliyyat barede usere sehifenin ust hissesinde gostereceyimiz mesaji set eden komekci mini metod.
 
         #region Product Management
         [HttpGet]
@@ -58,15 +68,30 @@ namespace eShopApp.WebUI.Controllers
                     product.ProductImageName = imageName;
                 }
 
-                _productService.Create(product, catIDs);
+                bool resultOfProductCreateOperation = _productService.Create(product, catIDs);
 
-                TempData.Set<AlertMessage>("InformationalMessage", new AlertMessage()
+                if(resultOfProductCreateOperation == true)
                 {
-                    alertMessage = $"You have successfully created a new product with name: \"{product.ProductName}\"!",
-                    alertType = AlertMessage.AlertType.success
-                });
+                    CreateInformationalMessage
+                    (
+                        AlertMessage: $"You have successfully created a new product with name: \"{product.ProductName}\"!",
+                        AlertType: AlertMessage.AlertType.success
+                    );
 
-                return RedirectToAction(nameof(ProductList)); /* Yeni bir mehsul elave olunduqdan sonra admin qalmasin mehsul elave etme sehifesinde, onun yerine admini yonlendirek mehsul siyahisi sehifesine */
+                    return RedirectToAction(nameof(ProductList)); /* Yeni bir mehsul elave olunduqdan sonra admin qalmasin mehsul elave etme sehifesinde, onun yerine admini yonlendirek mehsul siyahisi sehifesine */
+                }
+                else
+                {
+                    CreateInformationalMessage
+                    (
+                        AlertMessage: $"{_productService.ErrorMessage}",
+                        AlertType: AlertMessage.AlertType.danger
+                    );
+
+                    /* Modelin propertyleri biznes qatinda 'IValidator' komeyile tetbiq etdiyim validasiyadan kece bilmese useri gonderirem mehsul yaratma sehifesine: */
+                    ViewData["Categories"] = _categoryService.GetAll();
+                    return View(productVM);
+                }
             }
             else
             {
@@ -128,15 +153,29 @@ namespace eShopApp.WebUI.Controllers
                     product.ProductImageName = imageName;
                 }
 
-                _productService.Update(product, catIDs);
+                bool resultOfProductUpdateOperation = _productService.Update(product, catIDs);
 
-                TempData.Set<AlertMessage>("InformationalMessage", new AlertMessage()
+                if (resultOfProductUpdateOperation == true)
                 {
-                    alertMessage = $"You have successfully edited a product with name: \"{product.ProductName}\"!",
-                    alertType = AlertMessage.AlertType.info
-                });
+                    CreateInformationalMessage
+                    (
+                        AlertMessage: $"You have successfully edited a product with name: \"{product.ProductName}\"!",
+                        AlertType: AlertMessage.AlertType.info
+                    );
 
-                return RedirectToAction(nameof(ProductList)); /* Mehsul editlendikden sonra admin qalmasin mehsul editleme sehifesinde, onun yerine admini yonlendirek mehsul siyahisi sehifesine */
+                    return RedirectToAction(nameof(ProductList)); /* Mehsul editlendikden sonra admin qalmasin mehsul editleme sehifesinde, onun yerine admini yonlendirek mehsul siyahisi sehifesine */
+                }
+                else
+                {
+                    CreateInformationalMessage
+                    (
+                        AlertMessage: $"{_productService.ErrorMessage}",
+                        AlertType: AlertMessage.AlertType.danger
+                    );
+
+                    /* Modelin propertyleri biznes qatinda 'IValidator' komeyile tetbiq etdiyim validasiyadan kece bilmese useri gonderirem mehsul yaratma sehifesine: */
+                    return View(productVM);
+                }
             }
             else
             {
@@ -151,18 +190,28 @@ namespace eShopApp.WebUI.Controllers
         {
             Product product = _productService.GetByID(prodID);
 
-            if(product != null)
+            if (product != null)
             {
                 _productService.Delete(product);
 
-                TempData.Set<AlertMessage>("InformationalMessage", new AlertMessage()
-                {
-                    alertMessage = $"You have successfully deleted a product with name: \"{product.ProductName}\"!",
-                    alertType = AlertMessage.AlertType.danger
-                });
-            }
+                CreateInformationalMessage
+                (
+                    AlertMessage: $"You have successfully deleted a product with name: \"{product.ProductName}\"!",
+                    AlertType: AlertMessage.AlertType.danger
+                );
 
-            return RedirectToAction(nameof(ProductList)); /* Mehsul silindikden sonra tezeden Redirect edirik admini hazirda oldugu 'ProductList' sehifesine, yeni bir baxima sehifeni refresh etdirmiw olduq */
+                return RedirectToAction(nameof(ProductList)); /* Mehsul silindikden sonra tezeden Redirect edirik admini hazirda oldugu 'ProductList' sehifesine, yeni bir baxima sehifeni refresh etdirmiw olduq */
+            }
+            else
+            {
+                CreateInformationalMessage
+                (
+                    AlertMessage: "The data you are trying to delete was not found in our database!",
+                    AlertType: AlertMessage.AlertType.danger
+                );
+
+                return RedirectToAction(nameof(ProductList)); /* Silinmeli mehsul tapilmadisa admini tezeden Redirect edirik hazirda oldugu 'ProductList' sehifesine, yeni bir baxima sehifeni refresh etdirmiw olduq */
+            }
         }
 
         [HttpPost] /* 'EditCategory' sehifesinde hazirda editlemeye caliwdigim kateqoriyaya("~/admin/category/{id}") aid olan her hansi bir mehsulun 'Delete'-ne basilsa iwleyecek: */
@@ -197,15 +246,29 @@ namespace eShopApp.WebUI.Controllers
             {
                 Category category = _mapper.Map<Category>(categoryVM);
 
-                _categoryService.Create(category);
+                bool resultOfCategoryCreateOperation = _categoryService.Create(category);
 
-                TempData.Set<AlertMessage>("InformationalMessage", new AlertMessage()
+                if (resultOfCategoryCreateOperation == true)
                 {
-                    alertMessage = $"You have successfully created a new category with name: \"{category.CategoryName}\"!",
-                    alertType = AlertMessage.AlertType.success
-                });
+                    CreateInformationalMessage
+                    (
+                        AlertMessage: $"You have successfully created a new category with name: \"{category.CategoryName}\"!",
+                        AlertType: AlertMessage.AlertType.success
+                    );
 
-                return RedirectToAction(nameof(CategoryList)); /* Yeni bir kateqoriya elave olunduqdan sonra admin qalmasin kateqoriya elave etme sehifesinde, onun yerine admini yonlendirek kateqoriya siyahisi sehifesine */
+                    return RedirectToAction(nameof(CategoryList)); /* Yeni bir kateqoriya elave olunduqdan sonra admin qalmasin kateqoriya elave etme sehifesinde, onun yerine admini yonlendirek kateqoriya siyahisi sehifesine */
+                }
+                else
+                {
+                    CreateInformationalMessage
+                    (
+                        AlertMessage: $"{_categoryService.ErrorMessage}",
+                        AlertType: AlertMessage.AlertType.danger
+                    );
+
+                    /* Modelin propertyleri biznes qatinda 'IValidator' komeyile tetbiq etdiyim validasiyadan kece bilmese useri gonderirem kateqoriya yaratma sehifesine: */
+                    return View(categoryVM);
+                }
             }
             else
             {
@@ -251,15 +314,29 @@ namespace eShopApp.WebUI.Controllers
 
                 category = _mapper.Map<Category>(categoryVM);
 
-                _categoryService.Update(category);
+                bool resultOfCategoryUpdateOperation = _categoryService.Update(category);
 
-                TempData.Set<AlertMessage>("InformationalMessage", new AlertMessage()
+                if (resultOfCategoryUpdateOperation == true)
                 {
-                    alertMessage = $"You have successfully edited a category with name: \"{category.CategoryName}\"!",
-                    alertType = AlertMessage.AlertType.info
-                });
+                    CreateInformationalMessage
+                    (
+                        AlertMessage: $"You have successfully edited a category with name: \"{category.CategoryName}\"!",
+                        AlertType: AlertMessage.AlertType.info
+                    );
 
-                return RedirectToAction(nameof(CategoryList)); /* Kateqoriya editlendikden sonra admin qalmasin kateqoriya editleme sehifesinde, onun yerine admini yonlendirek kateqoriya siyahisi sehifesine */
+                    return RedirectToAction(nameof(CategoryList)); /* Kateqoriya editlendikden sonra admin qalmasin kateqoriya editleme sehifesinde, onun yerine admini yonlendirek kateqoriya siyahisi sehifesine */
+                }
+                else
+                {
+                    CreateInformationalMessage
+                    (
+                        AlertMessage: $"{_categoryService.ErrorMessage}",
+                        AlertType: AlertMessage.AlertType.danger
+                    );
+
+                    /* Modelin propertyleri biznes qatinda 'IValidator' komeyile tetbiq etdiyim validasiyadan kece bilmese useri gonderirem kateqoriya yaratma sehifesine: */
+                    return View(categoryVM);
+                }
             }
             else
             {

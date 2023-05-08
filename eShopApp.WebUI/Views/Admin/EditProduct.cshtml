@@ -43,6 +43,34 @@
             </div>
 
             <div class="form-group row mb-2">
+                <label class="col-sm-2 col-form-label">Categories:</label>
+                <div class="col-sm-10">
+                    @if (((List<Category>)ViewData["Categories"]) != null)
+                    {
+                        @foreach (Category category in (List<Category>)ViewData["Categories"])
+                        {
+                            /* 1. Ilk once DB-da olan butun kateqoriyalara qarwiliq bir 'Switch' kontrolu yaradiriq. */
+                            /* 2. Her switch kontrolu yaradanda yoxlayiriq - eger DB-dan elde etdiyimiz hazirki kateqoriya('category') mehsulun kateqoriyalarindan her hansi birine beraberdirse demeli hazirki yaranacaq olan 'Switch' kontrol iwarelenerek('ON' - checked) yaradilmalidir, cunki mehsul hazirki kateqoriyada var. */
+
+                            <div class="form-check form-switch">
+                                @* Checkboxun ozu: *@
+                                @* Yaradacagim (hemin bu kateqoriyalari temsil eden) input-un 'value'-sunu servere gonderecem, gondereceyim hemin 'value'-nu action-da hemin inputun 'name'-i vasitesile yaxalayacam. *@
+                                @* Lakin, burada foreach dovru var, alt-alta kateqoriya sayi qeder 'Switch' kontrolu yaratmiw olacayiq - bu ise o demekdir ki actiona tek bir '@category.CategoryID' gelmeyecek, actiona bir nece(daha once dediyim kimi kateqoriya sayi qeder) '@category.CategoryID' gelecek ve ustelik hemin bu yaranacaq olan 'Switch' kontrollarinin 'name'-leride eyni olacagina gore Actionda hemin bu yaxalanacaq olan '@category.CategoryID'-leri 'int[]' olaraq yaxalamaliyam (ki servere gelmiw olan butun '@category.CategoryID'-leri yaxalayim, 'int' ile qarwilasam tek bir dene '@category.CategoryID'-ni yaxalamiw olacam, oda boyuk ehtimal son 'Switch' kontrolunun 'value'-su olacaq idi) *@
+                                <input class="form-check-input"
+                                       type="checkbox"
+                                       name="catIDs"
+                                       value="@category.CategoryID"
+                                       @(Model.SelectedCategories.Any(cat => cat.CategoryID == category.CategoryID) ? "checked" : "")>
+
+                                @* Checkboxun yazisi: *@
+                                <label class="form-check-label" for="category_@category.CategoryID">@category.CategoryName</label>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+
+            <div class="form-group row mb-2">
                 <label class="col-sm-2 col-form-label" asp-for="ProductIsApproved"></label>
                 <div class="col-sm-10">
                     <div class="form-check form-switch">

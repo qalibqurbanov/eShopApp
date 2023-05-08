@@ -3,19 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using eShopApp.Business.Validation.Abstract;
 using eShopApp.DataAccess.Repository.Abstract;
 using eShopApp.DataAccess.Repository.Abstract.GenericRepositories;
 using eShopApp.Entity.Entities;
 
 namespace eShopApp.Business.Services.Abstract
 {
-    public interface ICategoryService
+    public interface ICategoryService : IValidator<Category>
     {
         /* IRepository */
         Category GetByID(int ID);
         List<Category> GetAll();
-        void Create(Category entity);
-        void Update(Category entity);
+        bool Create(Category entity);
+        bool Update(Category entity);
         void Delete(Category entity);
 
         /* ICategoryRepository */

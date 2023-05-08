@@ -46,7 +46,7 @@
                         @* Hazirki kateqoriyaya aid ne qeder mehsul varsa o qeder dovr edirem, cunki her birini actiona gonderecem (her ehtimala qarwi ki eger actiona getmiw model validasiyadan ugurla kece bilmese yeniden xetali inputlari ve hazirki kateqoriyada olan mehsullari cedvelde siralamaq ucun view-ya gonderim) ve bu sebeble gerek her bir mehsulu yerlewdirem hidden inputa (ki, POST sorgusu ile birlikde gonderilsin actiona): *@
                         @for (int i = 0; i < Model.Products.Count; i++)
                         {
-                            @* Kateqoriya editleme sehifesindeki cedvelde, mehsulun yalniz 4 dene melumatini gosterirem deye, mehsulun yalniz hemin 4 melumatini yerlewdirirem 4 ferqli hidden inputlara: *@
+                            @* Kateqoriya editleme sehifesindeki cedvelde, mehsulun yalniz 4 dene melumatini gosterirem, lakin mehsulun butun 6 uzvunu ferqli hidden inputlara yerlewdirirem - niye? : cunki, Action metoda modelin butun propertylerini gondermeliydim hidden input komeyile, amma men 4 denesini (yeni, yalniz gostermek istediklerimi) gondermeye caliwirdim ve belece 'ModelState.IsValid' hemiwe 'false' olurdu: *@
                             <input type="hidden" name="Products[@i].ProductID" value="@Model.Products[i].ProductID">
                             <input type="hidden" name="Products[@i].ProductImageName" value="@Model.Products[i].ProductImageName">
                             <input type="hidden" name="Products[@i].ProductName" value="@Model.Products[i].ProductName">

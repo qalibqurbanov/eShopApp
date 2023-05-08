@@ -13,26 +13,99 @@ namespace eShopApp.Business.Services.Concrete
     public class ProductManager : IProductService
     {
         private readonly IProductRepository _productRepository;
-        public ProductManager(IProductRepository productRepository) => _productRepository = productRepository;
-
-        public void Update(Product entity)
+        public ProductManager(IProductRepository productRepository)
         {
-            _productRepository.Update(entity);
+            _productRepository = productRepository;
         }
 
-        public void Update(Product entity, int[] CategoryIDs)
+        #region IValidator
+        public string ErrorMessage { get; set; }
+
+        public bool Validate(Product entity)
         {
-            _productRepository.Update(entity, CategoryIDs);
+            /* Ilk bawda model valid olmuw olsun: */
+            bool isValid = true;
+
+            if(string.IsNullOrEmpty(entity.ProductName))
+            {
+                ErrorMessage += "Mehsul adi bow buraxila bilmez!\n";
+                isValid = false;
+            }
+
+            if (entity.ProductPrice < 0)
+            {
+                ErrorMessage += "Mehsulun qiymeti menfi ola bilmez!\n";
+                isValid = false;
+            }
+
+            // ve s. mehsul ile elaqeli validasiyalar...
+
+            return isValid;
+        }
+        #endregion IValidator
+
+        public bool Update(Product entity)
+        {
+            if (Validate(entity))
+            {
+                _productRepository.Update(entity);
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
-        public void Create(Product entity)
+        public bool Update(Product entity, int[] CategoryIDs)
         {
-            _productRepository.Create(entity);
+            if (Validate(entity))
+            {
+                if(CategoryIDs.Length == 0 || CategoryIDs == null)
+                {
+                    /* Mehsulun aid oldugu kateqoriyalarida yeniliyirem 'Update()' icerisinde yenileyecem deye burada qayda qoyuram ki - yenilemek istediyim mehsul en az 1 kateqoriyaya aid edilmelidir. */
+                    ErrorMessage += "Mehsulun ugurla yenilene bilmeyi ucun en az 1 kateqoriya secilmelidir.";
+                    return false;
+                }
+                else
+                {
+                    _productRepository.Update(entity, CategoryIDs);
+                    return true;
+                }
+            }
+            else
+            {
+                return false;
+            }
         }
 
-        public void Create(Product entity, int[] CategoryIDs)
+        public bool Create(Product entity)
         {
-            _productRepository.Create(entity, CategoryIDs);
+            if(Validate(entity))
+            {
+                _productRepository.Create(entity);
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool Create(Product entity, int[] CategoryIDs)
+        {
+            if (Validate(entity))
+            {
+                _productRepository.Create(entity, CategoryIDs);
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public void Delete(Product entity)

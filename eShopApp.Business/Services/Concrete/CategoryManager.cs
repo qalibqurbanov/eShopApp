@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using eShopApp.Business.Services.Abstract;
 using eShopApp.DataAccess.Repository.Abstract;
+using eShopApp.DataAccess.Repository.Concrete;
 using eShopApp.Entity.Entities;
 
 namespace eShopApp.Business.Services.Concrete
@@ -12,7 +13,63 @@ namespace eShopApp.Business.Services.Concrete
     public class CategoryManager : ICategoryService
     {
         private readonly ICategoryRepository _categoryRepository;
-        public CategoryManager(ICategoryRepository categoryRepository) => this._categoryRepository = categoryRepository;
+        public CategoryManager(ICategoryRepository categoryRepository)
+        {
+            this._categoryRepository = categoryRepository;
+        }
+
+        #region IValidator
+        public string ErrorMessage { get; set; }
+
+        public bool Validate(Category entity)
+        {
+            /* Ilk bawda model valid olmuw olsun: */
+            bool isValid = true;
+
+            if (string.IsNullOrEmpty(entity.CategoryName))
+            {
+                ErrorMessage += "Kateqoriya adi bow buraxila bilmez!\n";
+                isValid = false;
+            }
+
+            // ve s. kateqoriya ile elaqeli validasiyalar...
+
+            return isValid;
+        }
+        #endregion IValidator
+
+        public bool Update(Category entity)
+        {
+            if (Validate(entity))
+            {
+                _categoryRepository.Update(entity);
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool Create(Category entity)
+        {
+            if (Validate(entity))
+            {
+                _categoryRepository.Create(entity);
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public void Delete(Category entity)
+        {
+            _categoryRepository.Delete(entity);
+        }
 
         public List<Category> GetAll()
         {
@@ -22,21 +79,6 @@ namespace eShopApp.Business.Services.Concrete
         public Category GetByID(int ID)
         {
             return _categoryRepository.GetByID(ID, true);
-        }
-
-        public void Update(Category entity)
-        {
-            _categoryRepository.Update(entity);
-        }
-
-        public void Create(Category entity)
-        {
-            _categoryRepository.Create(entity);
-        }
-
-        public void Delete(Category entity)
-        {
-            _categoryRepository.Delete(entity);
         }
 
         public Category GetByIdWithProducts(int CategoryID)
