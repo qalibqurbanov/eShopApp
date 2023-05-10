@@ -64,7 +64,7 @@ namespace eShopApp.Business.Services.Concrete
             {
                 if(CategoryIDs.Length == 0 || CategoryIDs == null)
                 {
-                    /* Mehsulun aid oldugu kateqoriyalarida yeniliyirem 'Update()' icerisinde yenileyecem deye burada qayda qoyuram ki - yenilemek istediyim mehsul en az 1 kateqoriyaya aid edilmelidir. */
+                    /* Mehsulun aid oldugu kateqoriyalarida hazirki 'Update(Product, int[])' metodu icerisinde yenileyecem deye burada qayda qoyuram ki - yenilemek istediyim mehsul en az 1 kateqoriyaya aid edilmelidir. */
                     ErrorMessage += "Mehsulun ugurla yenilene bilmeyi ucun en az 1 kateqoriya secilmelidir.";
                     return false;
                 }
