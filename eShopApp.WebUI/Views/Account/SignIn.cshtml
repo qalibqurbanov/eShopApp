@@ -1,0 +1,85 @@
+﻿@model SignInModel
+
+@{
+    Layout = null;
+}
+
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/loginForm.css" />
+</head>
+<body>
+    @section Scripts
+    {
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+        @* .NET Core modele verilmiw Data Annotation atributlari sayesinde modelin aid oldugu uygun inputlara "data-..."
+    atributunu verir. Geriye qalir JQuery-nin validasiya kitabxanasini lazimi sehifelere ve ya birbawa yalniz
+    '_Layout'-a(layouta elave edilsin validasiya lazim oldu-olmadi butun sehifelere bu kitabxanalar elave edilecek, bu ise
+    bize lazim deyil) elave ederek xetalari usere client/brauzer terefde dinamik bir wekilde (JQuery-nin awagidaki 2
+    validasiya kitabxanasi sayesinde) avtomatik olaraq gostermek: *@
+        <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+        @* JQuery-nin bu iki validasiya kitabxanasini elave etmemiwden qabaq mutleq 'jquery.js' import olunmalidir, cunki
+    yuxaridaki hemin bu 2 validasiya kitabxanasinin iwleye bilmesi ucun 'jquery.js'-e ehtiyaci var *@
+    }
+
+    <div class="wrapper bg-white">
+        <div class="h2 text-center">SIGN IN</div>
+            @{
+                AlertMessage alertMessage = TempData.Get<AlertMessage>("InformationalMessage");
+
+                if (alertMessage != null)
+                {
+                    <div class="row mt-4">
+                        <div class="col-md-12">
+                            <div class="alert alert-@alertMessage.alertType">
+                                @alertMessage.alertMessage
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                TempData.Remove("InformationalMessage"); @* Bawqa sehifelere kecende kecmiw mesaj gorsenmesin deye mesaji silirem TempData-dan *@
+            }
+        <div> 
+            <div asp-validation-summary="All" class="text-danger"></div>
+        </div>
+
+        <form asp-controller="Account" asp-action="SignIn" method="post" class="pt-3">
+            <div class="form-group py-2">
+                <div class="input-field">
+                    <input type="Email" asp-for="Email" placeholder="Email" />
+                </div>
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="form-group py-2">
+                <div class="input-field">
+                    <input type="password" asp-for="Password" placeholder="Password" />
+                </div>
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+
+            <div class="d-flex align-items-start">
+                <div class="remember">
+                    <label class="option text-muted"> Remember me
+                        <input type="checkbox" asp-for="RememberMe">
+                        <span class="checkmark"></span>
+                    </label>
+                </div>
+
+                <div class="ml-auto">
+                    <a id="forgot" asp-controller="Account" asp-action="reset">Forgot Password?</a>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-block text-center my-3">Log in</button>
+
+            <div class="text-center pt-3 text-muted">Not a member?
+                <a asp-controller="Account" asp-action="signup">Sign up</a>
+            </div>
+        </form>
+    </div>
+</body>

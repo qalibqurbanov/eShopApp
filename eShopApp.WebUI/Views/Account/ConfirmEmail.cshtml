@@ -1,0 +1,43 @@
+﻿@{
+    Layout = null;
+}
+
+<html>
+<head>
+    
+    <link rel="stylesheet" href="~/css/loginForm.css" />
+</head>
+<body>
+    <div class="wrapper bg-white">
+        <h1>Email Confirmation Result</h1>
+
+        @{
+            AlertMessage alertMessage = TempData.Get<AlertMessage>("InformationalMessage");
+
+            if (alertMessage != null)
+            {
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        <div class="alert alert-@alertMessage.alertType">
+                            @alertMessage.alertMessage
+                        </div>
+                    </div>
+                </div>
+            }
+
+            TempData.Remove("InformationalMessage"); @* Bawqa sehifelere kecende kecmiw mesaj gorsenmesin deye mesaji silirem TempData-dan *@
+        }
+        <div class="row d-block text-center">
+            @if(alertMessage.alertType == AlertMessage.AlertType.success)
+            {
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" />
+                <button asp-controller="account" asp-action="signin" class="btn btn-success">SignIn</button>
+            }
+            @if(alertMessage.alertType == AlertMessage.AlertType.danger)
+            {
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" />
+                <button asp-controller="account" asp-action="signup" class="btn btn-success">SignUp</button>
+            }
+        </div>
+    </div>
+</body>

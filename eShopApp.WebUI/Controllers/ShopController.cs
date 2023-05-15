@@ -1,9 +1,8 @@
-﻿using eShopApp.Business.Services.Abstract;
+﻿using eShopApp.WebUI.Models;
 using eShopApp.Entity.Entities;
-using eShopApp.WebUI.Models;
-using eShopApp.WebUI.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+using eShopApp.WebUI.Models.ViewModels;
+using eShopApp.Business.Services.Abstract;
 
 namespace eShopApp.WebUI.Controllers
 {

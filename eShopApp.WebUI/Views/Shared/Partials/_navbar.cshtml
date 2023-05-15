@@ -19,16 +19,42 @@
                 <a href="#" class="nav-link text-primary">About</a>
             </li>
 
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup='true' aria-expanded="false">Management</a>
+            @if(User.Identity.IsAuthenticated)
+            {
+                <li class="nav-item">
+                    <span class="nav-link">
+                        @* <i class="fa-solid fa-minus"></i> *@
+                        <i class="fa-solid fa-hashtag"></i>
+                    </span>
+                </li>
 
-                <ul class="dropdown-menu">
-                    <li><a asp-controller="admin" asp-action="ProductList" class="dropdown-item text-primary">Product Management</a></li>
-                    <li><a asp-controller="admin" asp-action="CategoryList" class="dropdown-item text-primary">Category Management</a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup='true' aria-expanded="false">Management</a>
 
-                    @*<li><hr class="dropdown-divider"></li>*@
-                </ul>
-            </li>
+                    <ul class="dropdown-menu">
+                        <li><a asp-controller="admin" asp-action="ProductList" class="dropdown-item text-primary">Product Management</a></li>
+                        <li><a asp-controller="admin" asp-action="CategoryList" class="dropdown-item text-primary">Category Management</a></li>
+
+                        @*<li><hr class="dropdown-divider"></li>*@
+                    </ul>
+                </li>
+                
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup='true' aria-expanded="false">@User.Identity.Name</a>
+
+                    <ul class="dropdown-menu">
+                        <li><a asp-controller="account" asp-action="signout" class="dropdown-item text-primary">Logout</a></li>
+
+                        @*<li><hr class="dropdown-divider"></li>*@
+                    </ul>
+                </li>
+            }
+            else
+            {
+                <li class="nav-item bg-danger">
+                    <a asp-controller="account" asp-action="signin" class="nav-link text-light">JOIN US</a>
+                </li>
+            }
         </ul>
     </div>
 </div>

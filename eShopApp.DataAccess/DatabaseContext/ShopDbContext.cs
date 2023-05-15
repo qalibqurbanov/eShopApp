@@ -1,6 +1,6 @@
 ﻿using eShopApp.Entity.Entities;
-using eShopApp.Entity.EntityConfiguration.FluentAPI;
 using Microsoft.EntityFrameworkCore;
+using eShopApp.Entity.EntityConfiguration.FluentAPI;
 
 namespace eShopApp.DataAccess.DatabaseContext
 {
@@ -9,7 +9,7 @@ namespace eShopApp.DataAccess.DatabaseContext
     /// </summary>
     public class ShopDbContext : DbContext
     {
-        public ShopDbContext(DbContextOptions<ShopDbContext> option) : base(option) { }
+        public ShopDbContext(DbContextOptions<ShopDbContext> options) : base(options) { }
 
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }

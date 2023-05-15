@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using System.Text.Json;
+﻿using System.Text.Json;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace eShopApp.WebUI.Extensions.Serialization
 {

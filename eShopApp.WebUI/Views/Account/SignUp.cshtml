@@ -1,0 +1,97 @@
+﻿@model SignUpModel
+
+@{
+    Layout = null;
+}
+
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/loginForm.css" />
+</head>
+<body>
+    @section Scripts
+    {
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+        @* .NET Core modele verilmiw Data Annotation atributlari sayesinde modelin aid oldugu uygun inputlara "data-..."
+    atributunu verir. Geriye qalir JQuery-nin validasiya kitabxanasini lazimi sehifelere ve ya birbawa yalniz
+    '_Layout'-a(layouta elave edilsin validasiya lazim oldu-olmadi butun sehifelere bu kitabxanalar elave edilecek, bu ise
+    bize lazim deyil) elave ederek xetalari usere client/brauzer terefde dinamik bir wekilde (JQuery-nin awagidaki 2
+    validasiya kitabxanasi sayesinde) avtomatik olaraq gostermek: *@
+        <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+        @* JQuery-nin bu iki validasiya kitabxanasini elave etmemiwden qabaq mutleq 'jquery.js' import olunmalidir, cunki
+    yuxaridaki hemin bu 2 validasiya kitabxanasinin iwleye bilmesi ucun 'jquery.js'-e ehtiyaci var *@
+    }
+
+    <div class="wrapper bg-white">
+        <div class="h2 text-center">SIGN UP</div>
+            @{
+                AlertMessage alertMessage = TempData.Get<AlertMessage>("InformationalMessage");
+
+                if (alertMessage != null)
+                {
+                    <div class="row mt-4">
+                        <div class="col-md-12">
+                            <div class="alert alert-@alertMessage.alertType">
+                                @alertMessage.alertMessage
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                TempData.Remove("InformationalMessage"); @* Bawqa sehifelere kecende kecmiw mesaj gorsenmesin deye mesaji silirem TempData-dan *@
+            }
+
+        <div>
+            <div asp-validation-summary="All" class="text-danger"></div>
+        </div>
+
+        <form asp-controller="Account" asp-action="SignUp" method="post" class="pt-3">
+            <div class="form-group py-2">
+                <div class="input-field">
+                    <input type="text" asp-for="FirstName" placeholder="First Name" />
+                </div>
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group py-2">
+                <div class="input-field">
+                    <input type="text" asp-for="LastName" placeholder="Last Name" />
+                </div>
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group py-2">
+                <div class="input-field">
+                    <input type="text" asp-for="UserName" placeholder="User Name" />
+                </div>
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group py-2">
+                <div class="input-field">
+                    <input type="email" asp-for="Email" placeholder="Email" />
+                </div>
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="form-group py-2">
+                <div class="input-field">
+                    <input type="password" asp-for="Password" placeholder="Password" />
+                </div>
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+
+            <div class="form-group py-2">
+                <div class="input-field">
+                    <input type="password" asp-for="RePassword" placeholder="Re-enter Password" />
+                </div>
+                <span asp-validation-for="RePassword" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-block text-center my-3">SIGN UP</button>
+        </form>
+    </div>
+</body>

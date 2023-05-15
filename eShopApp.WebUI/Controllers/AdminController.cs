@@ -1,14 +1,16 @@
 ﻿using AutoMapper;
-using eShopApp.Business.Services.Abstract;
-using eShopApp.Entity.Entities;
-using eShopApp.WebUI.Extensions.Helpers;
-using eShopApp.WebUI.Extensions.Serialization;
 using eShopApp.WebUI.Models;
-using eShopApp.WebUI.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using eShopApp.Entity.Entities;
+using eShopApp.WebUI.Models.ViewModels;
+using eShopApp.WebUI.Extensions.Helpers;
+using Microsoft.AspNetCore.Authorization;
+using eShopApp.Business.Services.Abstract;
+using eShopApp.WebUI.Extensions.Serialization;
 
 namespace eShopApp.WebUI.Controllers
 {
+    [Authorize]
     public class AdminController : Controller
     {
         private readonly IProductService _productService;
@@ -354,11 +356,11 @@ namespace eShopApp.WebUI.Controllers
             {
                 _categoryService.Delete(category);
 
-                TempData.Set<AlertMessage>("InformationalMessage", new AlertMessage()
-                {
-                    alertMessage = $"You have successfully deleted a category with name: \"{category.CategoryName}\"!",
-                    alertType = AlertMessage.AlertType.danger
-                });
+                CreateInformationalMessage
+                (
+                    AlertMessage: $"You have successfully deleted a category with name: \"{category.CategoryName}\"!",
+                    AlertType: AlertMessage.AlertType.danger
+                );
             }
 
             return RedirectToAction(nameof(CategoryList)); /* Kateqoriya silindikden sonra tezeden Redirect edirik admini hazirda oldugu 'CategoryList' sehifesine, yeni bir baxima sehifeni refresh etdirmiw olduq */

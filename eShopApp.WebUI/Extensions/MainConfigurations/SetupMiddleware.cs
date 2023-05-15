@@ -1,8 +1,4 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
-
-namespace eShopApp.WebUI.Extensions.MainConfigurations
+﻿namespace eShopApp.WebUI.Extensions.MainConfigurations
 {
     /// <summary>
     /// Middleware-lari saxlayan sinifdir.
@@ -30,6 +26,7 @@ namespace eShopApp.WebUI.Extensions.MainConfigurations
             // app.UseSession();
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

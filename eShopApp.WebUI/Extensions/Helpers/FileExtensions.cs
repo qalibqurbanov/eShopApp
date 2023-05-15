@@ -1,8 +1,4 @@
-﻿using System.IO;
-using eShopApp.DataAccess.DatabaseContext;
-using Microsoft.Extensions.Hosting;
-
-namespace eShopApp.WebUI.Extensions.Helpers
+﻿namespace eShopApp.WebUI.Extensions.Helpers
 {
     /// <summary>
     /// Fayllarla iwlemek ile elaqeli extension metodlari saxlayir.

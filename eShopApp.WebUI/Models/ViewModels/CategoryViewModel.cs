@@ -1,5 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
-using eShopApp.Entity.Entities;
+﻿using eShopApp.Entity.Entities;
+using System.ComponentModel.DataAnnotations;
 
 namespace eShopApp.WebUI.Models.ViewModels
 {

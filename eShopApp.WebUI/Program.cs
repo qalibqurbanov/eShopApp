@@ -10,7 +10,7 @@ namespace eShopApp.WebUI
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddDefaultServices(builder.Configuration);
-            builder.Services.AddCustomServices();
+            builder.Services.AddCustomServices(builder.Configuration);
 
             var app = builder.Build();
 
