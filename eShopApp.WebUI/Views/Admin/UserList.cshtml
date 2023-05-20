@@ -1,0 +1,91 @@
+@model IEnumerable<AppUser> /* View-ya 'AppUser' kolleksiyasinin geleceyini bildirirem */
+
+@section CSS
+{
+    @* JQuery-nin 'dataTables' kitabxanasi komeyile daha funksional table yaradiriq. Lakin bunun yerine ozumuz C# komeyile melumatlari DB-dan az-az elde ederek ozumuz seyfeleme etsek yaxwidir, cunki 'dataTables' iwletdiyimiz zaman DB-daki userleri toplu wekilde birden elde etmekle cedvelde gostermiw oluruq, 'dataTables' sadece gozellik/seliqe ucundur burada iwletmeyimde meqsed: *@
+
+    @* dataTables-in bootstrap stillendirmeli variantini iwletmek ucun bu iki kitabxanani elave etmeliyem: *@
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" />
+
+    @* dataTables-in ozunun original/default stillendirmesini iwletmek ucun yalniz bu stili elave etmeli idim: *@
+    @* <link rel="stylesheet" href="//cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" /> *@
+
+    @* source : https://datatables.net/examples/styling/bootstrap5.html *@
+}
+
+<div class="row">
+    <div class="col-md-12 mt-4 text-center">
+        <h1 class="text-info">User Management</h1>
+    </div>
+
+    <hr />
+
+    <table class="table table-bordered table-sm table-striped" id="myTable">
+        <a asp-controller="Admin" asp-action="UserCreate" class="btn btn-primary mb-3"><i class="fa-solid fa-plus"></i> Add User</a>
+
+        <thead>
+            <tr>
+                <td class="text-center">FirstName</td>
+                <td class="text-center">LastName</td>
+                <td class="text-center">UserName</td>
+                <td class="text-center">Email</td>
+                <td class="text-center">EmailConfirmed</td>
+                <td style="width: 200px;" class="text-center">Operation</td>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Count() == 0)
+            {
+                <tr>
+                    <td colspan="3">
+                        <div class="alert alert-warning">
+                            <h3>No Users...</h3>
+                        </div>
+                    </td>
+                </tr>
+            }
+            else
+            {
+                @foreach (AppUser user in Model)
+                {
+                    string sinifler = string.Empty;
+                    if(user.EmailConfirmed) sinifler = "bg-success text-center text-light";
+                    else sinifler = "bg-warning text-center text-light";
+                    
+                    <tr class="@sinifler">
+                        <td class="@sinifler">@user.FirstName</td>
+                        <td class="@sinifler">@user.LastName</td>
+                        <td class="@sinifler">@user.UserName</td>
+                        <td class="@sinifler">@user.Email</td>
+                        <td class="@sinifler">
+                            @if (@user.EmailConfirmed) { <i class="fa-solid fa-check"></i> }
+                            else { <i class="fa-solid fa-xmark"></i> }
+                        </td>
+                        <td class="@sinifler">
+                            @* Awagida "asp-" tag helperleri ile dediyim path buna beraberdir: href="/admin/user/@user.id" *@
+                            <a asp-controller="Admin" asp-action="UserEdit" asp-route-id="@user.Id" class="btn btn-primary form-control-sm"><i class="fa-solid fa-pen-to-square"></i> Edit</a>
+
+                            @* "~/admin/userdelete" - silinecek ID-ni action hemin bu awagidaki hidden input-dan yaxalayacaq: *@
+                            <form action="/admin/userdelete" method="post" class="d-inline">
+                                @* Her bir form icerisinde sileceyim userin ID-sini saxlayiram userden gizli bir wekilde (ki, form POST olunanda bu ID-nide gonderim actiona): *@
+                                <input type="hidden" name="userID" value="@user.Id">
+
+                                <button type="submit" class="btn btn-danger form-control-sm"><i class="fa-regular fa-trash-can"></i> Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts
+{
+    <script src="//cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script> @* bootstrap stillendirmeli 'dataTables'-in dogru iwleye bilmeyi ucundur*@
+    <script>
+        let table = new DataTable('#myTable');
+    </script>
+}

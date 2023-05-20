@@ -1,0 +1,55 @@
+@model IEnumerable<AppRole> /* View-ya 'AppRole' kolleksiyasinin geleceyini bildirirem */
+
+<div class="row">
+    <div class="col-md-12 mt-4 text-center">
+        <h1 class="text-info">Role Management</h1>
+    </div>
+
+    <hr />
+
+    <table class="table table-bordered table-striped">
+        <a asp-controller="Admin" asp-action="RoleCreate" class="btn btn-success mb-3"><i class="fa-solid fa-plus"></i> Add Role</a>
+
+        <thead>
+            <tr class="text-success">
+                <td style="width: 50px;" class="text-center">ID</td>
+                <td class="text-center">Name</td>
+                <td style="width: 200px;" class="text-center">Operation</td>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Count() == 0)
+            {
+                <tr>
+                    <td colspan="3">
+                        <div class="alert alert-warning">
+                            <h3>No Roles...</h3>
+                        </div>
+                    </td>
+                </tr>
+            }
+            else
+            {
+                @foreach (AppRole role in Model)
+                {
+                    <tr>
+                        <td class="text-center">@role.Id</td>
+                        <td class="text-center">@role.Name</td>
+                        <td class="text-center">
+                            @* Awagida "asp-" tag helperleri ile dediyim path buna beraberdir: href="/admin/role/@role.id" *@
+                            <a asp-controller="Admin" asp-action="RoleEdit" asp-route-id="@role.Id" class="btn btn-primary form-control-sm"><i class="fa-solid fa-pen-to-square"></i> Edit</a>
+
+                            @* "~/admin/roledelete" - silinecek ID-ni action hemin bu awagidaki hidden input-dan yaxalayacaq: *@
+                            <form action="/admin/roledelete" method="post" class="d-inline">
+                                @* Her bir form icerisinde sileceyim rolun ID-sini saxlayiram userden gizli bir wekilde (ki, form POST olunanda bu ID-nide gonderim actiona): *@
+                                <input type="hidden" name="roleID" value="@role.Id">
+
+                                <button type="submit" class="btn btn-danger form-control-sm"><i class="fa-regular fa-trash-can"></i> Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

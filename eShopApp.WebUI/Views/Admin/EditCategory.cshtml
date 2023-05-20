@@ -102,8 +102,8 @@
                                     <td class="text-center"><img src="~/img/ProductImages/@prod.ProductImageName" width="50%"></td>
                                     <td class="text-center">@prod.ProductName</td>
                                     <td class="text-center">
-                                        @if (prod.ProductIsApproved) { <i class="fa-solid fa-check"></i> }
-                                        else { <i class="fa-solid fa-xmark"></i> }
+                                        @if (prod.ProductIsApproved) { <i class="fa-solid fa-check" style="color: green;"></i> }
+                                        else { <i class="fa-solid fa-xmark" style="color: red;"></i> }
                                     </td>
                                     <td class="text-center">
                                         <form action="/admin/deleteproductfromcategory" method="post" class="d-inline-block mt-2">

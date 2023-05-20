@@ -17,10 +17,10 @@ body
 
 .fa-check
 {
-    color: green;
+    color: green !important;
 }
 
 .fa-xmark
 {
-    color: red;
+    color: red !important ;
 }

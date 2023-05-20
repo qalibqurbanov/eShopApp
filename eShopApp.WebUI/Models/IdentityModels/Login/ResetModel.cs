@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace eShopApp.WebUI.Models.IdentityModels
+namespace eShopApp.WebUI.Models.IdentityModels.Login
 {
     /// <summary>
     /// Passwordu berpa etmek meqsedile userin formu doldurub post etdiyi datalari temsil edir.

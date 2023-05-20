@@ -1,0 +1,79 @@
+﻿@model RoleDetails
+
+<div class="row text-center">
+    <h1 class="text-info">Edit Role</h1>
+</div>
+
+<hr />
+
+<div class="row">
+    <div class="col-md-12">
+        <form asp-controller="Admin" asp-action="RoleEdit" method="post" class="py-2 px-2">
+            <div>
+                <div asp-validation-summary="All" class="text-danger"></div>
+            </div>
+
+            @* Uzerinde iw goreceyimiz rolun ID ve Name-ni de servere/actiona gondermek meqsedile rolun ID ve Name-ni saxlayiram hidden inputda (ki, form post olunanda bunlarda gonderilsin servere/actiona): *@
+            <input type="hidden" name="RoleID" value="@Model.Role.Id" />
+            <input type="hidden" name="RoleName" value="@Model.Role.Name" />
+
+            <div class="col-md-6 float-start">
+                <div class="px-1 py-1">
+                    <h6 class="bg-info text-white px-1 py-1 text-center">Add to "@Model.Role.Name" role:</h6>
+
+                    <table class="table table-bordered table-striped table-sm text-center">
+                        @if(Model.NonMembers.Count() == 0)
+                        {
+                            <td colspan="2" class="text-danger">Butun userler rollara ayriwdirilib, rolsuz user yoxdur.</td>
+                        }
+                        else
+                        {
+                            @foreach(AppUser user in Model.NonMembers)
+                            {
+                                <tr>
+                                    <td>@user.UserName</td>
+                                    <td>
+                                        @* Foreach sayesinde her user ucun bir bawqa checkbox yaradilmiw olacaq. Yaradilacaq olan hemin bu checkboxlarin hamisina eyni adi verirem ki server terefde tek bir kolleksiya komeyile hansi userlerin check olundugunu celd ve sade bir wekilde elde edim: *@
+                                        <input type="checkbox" name="IDsToAddRole" value="@user.Id">
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </table>
+                </div>
+            </div>
+
+            <div class="col-md-6 float-start">
+                <div class="px-1 py-1">
+                    <h6 class="bg-info text-white px-1 py-1 text-center">Remove user from "@Model.Role.Name" role:</h6>
+
+                    <table class="table table-bordered table-striped table-sm text-center">
+                        @if(Model.Members.Count() == 0)
+                        {
+                            <td colspan="2" class="text-danger">Hazirki rolda olan user yoxdur.</td>
+                        }
+                        else
+                        {
+                            @foreach(AppUser user in Model.Members)
+                            {
+                                <tr>
+                                    <td>@user.UserName</td>
+                                    <td>
+                                        @* Foreach sayesinde her user ucun bir bawqa checkbox yaradilmiw olacaq. Yaradilacaq olan hemin bu checkboxlarin hamisina eyni adi verirem ki server terefde tek bir kolleksiya komeyile hansi userlerin check olundugunu celd ve sade bir wekilde elde edim: *@
+                                        <input type="checkbox" name="IDsToRemoveRole" value="@user.Id">
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </table>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="d-flex justify-content-center">
+                    <button type="submit" class="btn btn-primary">Edit Role</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

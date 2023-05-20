@@ -1,8 +1,8 @@
-﻿using eShopApp.DataAccess.DatabaseContext;
-using eShopApp.Entity.Entities;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+﻿using eShopApp.Entity.Entities;
 using Microsoft.Extensions.Hosting;
+using Microsoft.EntityFrameworkCore;
+using eShopApp.DataAccess.DatabaseContext;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace eShopApp.DataAccess
 {
@@ -14,7 +14,7 @@ namespace eShopApp.DataAccess
         /// <summary>
         /// Database yaradilmayibsa yaradir ve icerisini dummy datalar ile doldurur.
         /// </summary>
-        public static void Seed(this IHost host)
+        public static void SeedDummyDatasToDB(this IHost host)
         {
             /* 'Scoped' olan servisin scope/Request daxilinde cemi 1 orneyinin teleb olunmasini qarantiyaya almaq ucun yeni bir scope yaradiriq: */
             using (IServiceScope scope = host.Services.CreateScope())
@@ -23,11 +23,11 @@ namespace eShopApp.DataAccess
                 using (ShopDbContext _dbContext = scope.ServiceProvider.GetRequiredService<ShopDbContext>())
                 {
                     /* Test ucun yeni datalar(Category/Product) elave etsen ve ya movcud datalari(Category/Product) deyiwsen gerek DB-ni silib yeniden yaradasan. Datalari(Category/Product) deyiwmeyibse uncomment etme: */
-                    _dbContext.Database.EnsureDeleted();
+                    // _dbContext.Database.EnsureDeleted();
 
                     /* Ilk once - Database yoxdursa yarat: */
-                    _dbContext.Database.EnsureCreated();
-                    _dbContext.Database.Migrate();
+                    // _dbContext.Database.EnsureCreated();
+                    // _dbContext.Database.Migrate();
 
                     /* Icra olunmagi gozleyen migration yoxdursa ve ya migrationlar icra olunub qutariblarsa artiq gozleyen migration yoxdur ve sayi 0-dir demeli: */
                     if (_dbContext.Database.GetPendingMigrations().Count() == 0)

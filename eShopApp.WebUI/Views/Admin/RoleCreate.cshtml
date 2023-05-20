@@ -1,0 +1,39 @@
+@model RoleModel
+
+<div class="row">
+    <div class="col-md-12 text-center">
+        <h1 class="text-info">Create Role</h1>
+    </div>
+
+    <hr />
+
+    <div class="col-md-12">
+        <form asp-controller="Admin" asp-action="RoleCreate" method="post">
+            <div>
+                <div asp-validation-summary="All" class="text-danger"></div>
+            </div>
+
+            <div class="form-group row mb-2">
+                <label class="col-sm-2 col-form-label" asp-for="Name"></label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" asp-for="Name">
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-sm-10 offset-sm-2 d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary">Create Role</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts
+{
+    @* .NET Core modele verilmiw Data Annotation atributlari sayesinde modelin aid oldugu uygun inputlara "data-..." atributunu verir. Geriye qalir JQuery-nin validasiya kitabxanasini lazimi sehifelere ve ya birbawa yalniz '_Layout'-a(layouta elave edilsin validasiya lazim oldu-olmadi butun sehifelere bu kitabxanalar elave edilecek, bu ise bize lazim deyil) elave ederek xetalari usere client/brauzer terefde dinamik bir wekilde (JQuery-nin awagidaki 2 validasiya kitabxanasi sayesinde) avtomatik olaraq gostermek: *@
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    @* JQuery-nin bu iki validasiya kitabxanasini elave etmemiwden qabaq mutleq 'jquery.js' import olunmalidir, cunki yuxaridaki hemin bu 2 validasiya kitabxanasinin iwleye bilmesi ucun 'jquery.js'-e ehtiyaci var *@
+}

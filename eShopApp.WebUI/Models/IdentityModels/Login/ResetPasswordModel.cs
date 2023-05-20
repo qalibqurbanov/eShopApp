@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace eShopApp.WebUI.Models.IdentityModels
+namespace eShopApp.WebUI.Models.IdentityModels.Login
 {
     /// <summary>
     /// Userin formda yazaraq POST etdiyi yeni paswordu temsil edir.

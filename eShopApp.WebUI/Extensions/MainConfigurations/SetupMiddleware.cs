@@ -31,6 +31,66 @@
 
             app.UseEndpoints(endpoints =>
             {
+                // "~/admin/users/" : 'default' route-dan once yazilmalidir ki, "~/admin/users/" sxeminin default route-a uygun gelmesi sebebile default route ile ilk qarwilawaraq default route iwlemesin.
+                endpoints.MapControllerRoute
+                (
+                    name: "adminUserList",
+                    pattern: "admin/users",
+                    defaults: new { controller = "Admin", action = "UserList" }
+                );
+
+
+
+                // "~/admin/users/create"
+                endpoints.MapControllerRoute
+                (
+                    name: "adminUserCreate",
+                    pattern: "admin/users/create",
+                    defaults: new { controller = "Admin", action = "UserCreate" }
+                );
+
+
+
+                // "~/admin/user/id"
+                endpoints.MapControllerRoute
+                (
+                    name: "adminUserEdit",
+                    pattern: "admin/user/{id?}",
+                    defaults: new { controller = "Admin", action = "UserEdit" }
+                );
+
+
+
+                // "~/admin/roles/" : 'default' route-dan once yazilmalidir ki, "~/admin/roles/" sxeminin default route-a uygun gelmesi sebebile default route ile ilk qarwilawaraq default route iwlemesin.
+                endpoints.MapControllerRoute
+                (
+                    name: "adminRoleList",
+                    pattern: "admin/roles",
+                    defaults: new { controller = "Admin", action = "RoleList" }
+                );
+
+
+
+                // "~/admin/roles/create"
+                endpoints.MapControllerRoute
+                (
+                    name: "adminRoleCreate",
+                    pattern: "admin/roles/create",
+                    defaults: new { controller = "Admin", action = "RoleCreate" }
+                );
+
+
+
+                // "~/admin/role/id"
+                endpoints.MapControllerRoute
+                (
+                    name: "adminRoleEdit",
+                    pattern: "admin/roles/{id?}",
+                    defaults: new { controller = "Admin", action = "RoleEdit" }
+                );
+
+
+
                 // "~/admin/products/" : 'default' route-dan once yazilmalidir ki, "~/admin/products/" sxeminin default route-a uygun gelmesi sebebile default route ile ilk qarwilawaraq default route iwlemesin.
                 endpoints.MapControllerRoute
                 (

@@ -3,7 +3,7 @@ using eShopApp.WebUI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using eShopApp.WebUI.Identity.Entities;
-using eShopApp.WebUI.Models.IdentityModels;
+using eShopApp.WebUI.Models.IdentityModels.Login;
 using eShopApp.WebUI.Extensions.Serialization;
 using eShopApp.WebUI.Identity.Services.Abstract;
 
@@ -37,6 +37,14 @@ namespace eShopApp.WebUI.Controllers
             });
         }
         #endregion Identity ile elaqeli reallawdirilmiw emeliyyatlar barede usere sehifenin ust hissesinde gostereceyimiz mesaji set eden komekci mini metod.
+
+        #region User icazesinin olmadigi sehifeye kecid etse
+        [HttpGet]
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
+        #endregion User icazesinin olmadigi sehifeye kecid etse
 
         [HttpGet]
         public IActionResult SignIn()

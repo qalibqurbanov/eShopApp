@@ -1,0 +1,123 @@
+﻿@model UserEditModel
+
+<div class="row text-center">
+    <h1 class="text-info">Edit User</h1>
+</div>
+
+<hr />
+
+<div>
+    <form asp-controller="Admin" asp-action="UserEdit" method="post" class="row">
+        <div class="col-md-8 d-inline-block">
+            <div>
+                <div asp-validation-summary="All" class="text-danger"></div>
+            </div>
+
+            @* Uzerinde iw goreceyimiz userin ID-sini de servere/actiona gondermek meqsedile userin ID-sini saxlayiram
+            bir hidden inputda (ki, form post olunanda bunlarda gonderilsin servere/actiona): *@
+            <input type="hidden" name="UserID" value="@Model.UserID" />
+
+            <div class="form-group row mb-2">
+                <label class="col-sm-2 col-form-label" asp-for="FirstName"></label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" asp-for="FirstName">
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row mb-2">
+                <label class="col-sm-2 col-form-label" asp-for="LastName"></label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" asp-for="LastName">
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row mb-2">
+                <label class="col-sm-2 col-form-label" asp-for="UserName"></label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" asp-for="UserName">
+                    <span asp-validation-for="UserName" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row mb-2">
+                <label class="col-sm-2 col-form-label" asp-for="Email"></label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" asp-for="Email">
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row mb-2">
+                <label class="col-sm-2 col-form-label" asp-for="EmailConfirmed"></label>
+                <div class="col-sm-10">
+                    <div class="form-control border-0">
+                        @* checkbox label-in duz saginda yaradilsin deye 'form-control'-lu div icerisinde yaratmiwam *@
+                        @* userin tesdiqleme mailine kecid etmeyine ehtiyac olmadan, hazirki User Management uzerinden userin mailini tesdiqleye bilmek ucun yaradiram bu checkboxu: *@
+                        <input type="checkbox" asp-for="EmailConfirmed">
+                    </div>
+                    <span asp-validation-for="EmailConfirmed" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 d-inline-block">
+            <table class="table table-bordered table-sm table-striped">
+                <thead>
+                    <tr>
+                        <td class="text-center">Role name</td>
+                        <td class="text-center">Add to role</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if(ViewBag.AllAvailableRoles != null)
+                    {
+                        @* DB-da movcud olan rollari bir-bir elde edirem: *@
+                        @foreach (string roleName in ViewBag.AllAvailableRoles as List<string>)
+                        {
+                            @* Ve bawlayiram cedveli DB-da movcud olan rollarla ve userin hemin rolda olub-olmadigini temsil eden checkbox yaratmaga. Checkboxlarin necesi secilir secilsin, hamisini serverde ugurla yaxalaya bilmek ucun gerek 'name'-leri eyni olsun ve belece serverde massiv olaraq yaxalayim: *@
+
+                            <tr>
+                                <td class="text-center">@roleName</td>
+                                <td class="text-center">
+                                    <input class="form-check-input" 
+                                    type="checkbox" 
+                                    name="selectedRoleNames" 
+                                    value="@roleName" 
+                                    @(Model.RolesOfUser.Any<string>(role => role == roleName) ? "checked" : "") />
+                                    @* Sonda hazirki checkboxa 'checked' atributunun elave olunub-olunmamali olduguna qerar verirem, deyirem ki: userin oldugu rollar('role') arasinda dovr deyiweni olan hazirki rol(roleName) varsa hemin bu yaradilacaq olan checkboxa 'checked' atributunu elave et. *@
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td class="text-center text-danger" colspan="2">Rol yoxdur. Useri rola elave etmek ucun ilk once rol yaradin.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-sm-10 offset-sm-2 d-flex justify-content-center">
+                <button type="submit" class="btn btn-primary">Edit User</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts
+{
+    @* .NET Core modele verilmiw Data Annotation atributlari sayesinde modelin aid oldugu uygun inputlara "data-..."
+atributunu verir. Geriye qalir JQuery-nin validasiya kitabxanasini lazimi sehifelere ve ya birbawa yalniz
+'_Layout'-a(layouta elave edilsin validasiya lazim oldu-olmadi butun sehifelere bu kitabxanalar elave edilecek, bu ise
+bize lazim deyil) elave ederek xetalari usere client/brauzer terefde dinamik bir wekilde (JQuery-nin awagidaki 2
+validasiya kitabxanasi sayesinde) avtomatik olaraq gostermek: *@
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    @* JQuery-nin bu iki validasiya kitabxanasini elave etmemiwden qabaq mutleq 'jquery.js' import olunmalidir, cunki
+yuxaridaki hemin bu 2 validasiya kitabxanasinin iwleye bilmesi ucun 'jquery.js'-e ehtiyaci var *@
+}

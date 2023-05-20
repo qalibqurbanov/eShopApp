@@ -31,12 +31,12 @@
             @if(alertMessage.alertType == AlertMessage.AlertType.success)
             {
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" />
-                <button asp-controller="account" asp-action="signin" class="btn btn-success">SignIn</button>
+                <a href="/account/signin" class="btn btn-success">SignIn</a>
             }
             @if(alertMessage.alertType == AlertMessage.AlertType.danger)
             {
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" />
-                <button asp-controller="account" asp-action="signup" class="btn btn-success">SignUp</button>
+                <a href="/account/signup" class="btn btn-success">SignUp</a>
             }
         </div>
     </div>

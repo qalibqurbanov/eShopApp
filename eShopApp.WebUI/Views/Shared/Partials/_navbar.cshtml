@@ -1,6 +1,7 @@
 ﻿<div class="navbar bg-transparent border-bottom navbar-expand-sm" style="font-size: 20px;">
     <div class="container">
-        <a asp-controller="home" asp-action="index" class="navbar-brand text-danger"><i class="fa-solid fa-socks"></i> eShopApp</a>
+        <a asp-controller="home" asp-action="index" class="navbar-brand text-danger"><i class="fa-solid fa-socks"></i>
+            eShopApp</a>
 
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
@@ -19,35 +20,42 @@
                 <a href="#" class="nav-link text-primary">About</a>
             </li>
 
-            @if(User.Identity.IsAuthenticated)
+            @if (User.Identity.IsAuthenticated)
             {
-                <li class="nav-item">
-                    <span class="nav-link">
-                        @* <i class="fa-solid fa-minus"></i> *@
-                        <i class="fa-solid fa-hashtag"></i>
-                    </span>
-                </li>
+                @if (User.IsInRole(nameof(eShopApp.WebUI.Identity.Enums.IdentityRoles.Admin)))
+                {
+                    <li class="nav-item">
+                        <span class="nav-link">
+                            @* <i class="fa-solid fa-minus"></i> *@
+                            <i class="fa-solid fa-hashtag text-danger"></i>
+                        </span>
+                    </li>
 
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup='true' aria-expanded="false">Management</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-haspopup='true' aria-expanded="false">Management</a>
 
-                    <ul class="dropdown-menu">
-                        <li><a asp-controller="admin" asp-action="ProductList" class="dropdown-item text-primary">Product Management</a></li>
-                        <li><a asp-controller="admin" asp-action="CategoryList" class="dropdown-item text-primary">Category Management</a></li>
+                        <ul class="dropdown-menu">
+                            <li><a asp-controller="admin" asp-action="ProductList" class="dropdown-item text-primary">Product Management</a></li>
+                            <li><a asp-controller="admin" asp-action="CategoryList" class="dropdown-item text-primary">Category Management</a></li>
 
-                        @*<li><hr class="dropdown-divider"></li>*@
-                    </ul>
-                </li>
-                
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup='true' aria-expanded="false">@User.Identity.Name</a>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
 
-                    <ul class="dropdown-menu">
-                        <li><a asp-controller="account" asp-action="signout" class="dropdown-item text-primary">Logout</a></li>
+                            <li><a asp-controller="admin" asp-action="RoleList" class="dropdown-item text-primary">Role Management</a></li>
+                            <li><a asp-controller="admin" asp-action="UserList" class="dropdown-item text-primary">User Management</a></li>
+                        </ul>
+                    </li>
 
-                        @*<li><hr class="dropdown-divider"></li>*@
-                    </ul>
-                </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup='true' aria-expanded="false">@User.Identity.Name</a>
+
+                        <ul class="dropdown-menu">
+                            <li><a asp-controller="account" asp-action="signout" class="dropdown-item text-primary">Logout</a></li>
+                        </ul>
+                    </li>
+                }
             }
             else
             {

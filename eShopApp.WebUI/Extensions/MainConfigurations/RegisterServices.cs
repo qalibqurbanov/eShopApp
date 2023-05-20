@@ -55,7 +55,7 @@ namespace eShopApp.WebUI.Extensions.MainConfigurations
                 options.LogoutPath = new PathString("/account/signout");
                 options.AccessDeniedPath = new PathString("/account/accessdenied");
 
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(2); /* Identity API ucun yaranacaq olan bu 'Cookie'-nin omrunun ne qeder olacagini bildirir */
+                options.ExpireTimeSpan = TimeSpan.FromDays(365); /* Identity API ucun yaranacaq olan bu 'Cookie'-nin omrunun ne qeder olacagini bildirir */
                 options.SlidingExpiration = true; /* Cookie-nin omrunu uzatmaq isteyirikse iwledirik. Hazirki Cookie-nin omrune qalmiw vaxtin('ExpireTimeSpan') yarisindan coxu kecende, eger user her hansi bir request(seyfenin yenilenmesi ve s.) gonderse servere bu zaman 'ExpireTimeSpan' vaxti sifirlanacaq, belece emin olunsun ki User aktivdir ve belece user profiline login olmuw veziyyetde qalsin. */
 
                 /* Cookie esasli Autentifikasiya ucun yaradilacaq olan Cookie-ni konfiqurasiya edirik: */
