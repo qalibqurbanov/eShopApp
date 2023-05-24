@@ -24,7 +24,7 @@
                     <table class="table table-bordered table-striped table-sm text-center">
                         @if(Model.NonMembers.Count() == 0)
                         {
-                            <td colspan="2" class="text-danger">Butun userler rollara ayriwdirilib, rolsuz user yoxdur.</td>
+                            <td colspan="2" class="text-danger">All users are assigned to roles, there is no user without a role.</td>
                         }
                         else
                         {
@@ -50,7 +50,7 @@
                     <table class="table table-bordered table-striped table-sm text-center">
                         @if(Model.Members.Count() == 0)
                         {
-                            <td colspan="2" class="text-danger">Hazirki rolda olan user yoxdur.</td>
+                            <td colspan="2" class="text-danger">There is no user in the current role.</td>
                         }
                         else
                         {

@@ -1,0 +1,108 @@
+@model CartModel
+
+<h1 class="h2 text-center mt-2 mb-2 text-dark bg-light p-4">
+    Your Cart (ID: @Model.CartID) <i class="fa-solid fa-cart-shopping"></i>
+</h1>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="text-left text-center">
+            <h4 class="lead">Cart items:</h4>
+        </div>
+
+        @if (Model.CartItems.Count > 0)
+        {
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th class="text-center">Product image</th>
+                        <th class="text-center">Product name</th>
+                        <th class="text-center">Product price</th>
+                        <th class="text-center">Product quantity</th>
+                        <th class="text-center">Total</th>
+                        <th class="text-center">Operation</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (CartItemModel cartItem in Model.CartItems)
+                    {
+                        <tr>
+                            <td class="text-center"><img src="~/img/ProductImages/@cartItem.ImageName" width="40"></td>
+                            <td class="text-center">@cartItem.Name</td>
+                            <td class="text-center">@cartItem.Price</td>
+                            <td class="text-center">@cartItem.Quantity</td>
+                            <td class="text-center">@(cartItem.Quantity * cartItem.Price) <i class="fa-solid fa-manat-sign" style="color:green;"></i></td>
+                            <td class="text-center">
+                                <form asp-controller="Cart" asp-action="DeleteFromCart" method="post">
+                                    @* Submite basilanda, 'Cart (Sebet)'-dan silmek istediyim mehsulun ID-sini servere/actiona gondererek hemin POST tipli actioni triggerleyirem: *@
+                                    <input type="hidden" name="productID" value="@cartItem.ProductID">
+
+                                    <button type="submit" class="btn btn-danger btn-sm">
+                                        <i class="fa-solid fa-xmark" style="color: white !important;"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div class="container">
+                <table class="table table-bordered bg-danger rounded-2">
+                    <tbody>
+                        <tr>
+                            <td class="text-light text-center h2 rounded-2 p-4">
+                                <h2>Your cart is empty.</h2>
+                                <a href="/" class="btn btn-outline-light">Start shopping</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+
+    <div class="col-md-4">
+        <div class="text-left text-center">
+            <h4 class="lead">Cart summary:</h4>
+        </div>
+        
+        <table class="table table-bordered table-hover">
+            <tbody>
+                <tr>
+                    <th>Shipping</th>
+                    <th>Free</th>
+                </tr>
+
+                <tr>
+                    <th>Cart total</th>
+                    @if(Model != null) /* 'CartModel' null olsa, yalandan icine girmeye caliwmayim */
+                    {
+                        <th>
+                            @Model.TotalPrice().ToString() <i class="fa-solid fa-manat-sign"></i>
+                        </th>
+                    }
+                    else
+                    {
+                        <th>
+                            0 <i class="fa-solid fa-manat-sign"></i>
+                        </th>
+                    }
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="text-center">
+            <a href="/" class="btn btn-primary btn-sm">
+                <i class="fa-solid fa-circle-arrow-left"></i> CONTINUE SHOPPING
+            </a>
+
+            <a href="/cart/checkout" class="btn btn-primary btn-sm">
+                <i class="fa-solid fa-circle-arrow-right"></i> CHECK OUT
+            </a>
+        </div>
+    </div>
+</div>

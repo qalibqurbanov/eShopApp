@@ -94,9 +94,11 @@ namespace eShopApp.WebUI.Extensions.MainConfigurations
         {
             serviceCollection.AddScoped<IProductRepository, ProductRepository>();
             serviceCollection.AddScoped<ICategoryRepository, CategoryRepository>();
+            serviceCollection.AddScoped<ICartRepository, CartRepository>();
 
             serviceCollection.AddScoped<IProductService, ProductManager>();
             serviceCollection.AddScoped<ICategoryService, CategoryManager>();
+            serviceCollection.AddScoped<ICartService, CartManager>();
 
             serviceCollection.AddScoped<IEmailSender, HotmailEmailSender>(serviceProvider => new HotmailEmailSender
             (

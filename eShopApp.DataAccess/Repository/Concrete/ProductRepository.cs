@@ -1,8 +1,8 @@
-﻿using eShopApp.DataAccess.DatabaseContext;
+﻿using eShopApp.Entity.Entities;
+using Microsoft.EntityFrameworkCore;
+using eShopApp.DataAccess.DatabaseContext;
 using eShopApp.DataAccess.Repository.Abstract;
 using eShopApp.DataAccess.Repository.Concrete.GenericRepositories;
-using eShopApp.Entity.Entities;
-using Microsoft.EntityFrameworkCore;
 
 namespace eShopApp.DataAccess.Repository.Concrete
 {

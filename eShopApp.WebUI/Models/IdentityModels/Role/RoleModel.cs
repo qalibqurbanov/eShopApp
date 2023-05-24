@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+
 namespace eShopApp.WebUI.Models.IdentityModels.Role
 {
     /// <summary>

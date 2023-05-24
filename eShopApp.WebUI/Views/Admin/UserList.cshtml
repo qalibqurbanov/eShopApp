@@ -50,8 +50,8 @@
                 @foreach (AppUser user in Model)
                 {
                     string sinifler = string.Empty;
-                    if(user.EmailConfirmed) sinifler = "bg-success text-center text-light";
-                    else sinifler = "bg-warning text-center text-light";
+                    if(user.EmailConfirmed) { sinifler = "bg-success text-center text-light"; }
+                    else { sinifler = "bg-warning text-center text-light"; }
                     
                     <tr class="@sinifler">
                         <td class="@sinifler">@user.FirstName</td>

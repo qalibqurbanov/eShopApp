@@ -17,7 +17,21 @@
 
             <div class="card-footer text-center">
                 <a asp-controller="shop" asp-action="details" asp-route-id="@Model.ProductID" class="btn btn-primary btn-sm">Details</a>
-                <a asp-controller="shop" asp-action="addtocart" asp-route-id="@Model.ProductID" class="btn btn-primary btn-sm">Add to Cart</a>
+
+                @* Bu skopda olanlar User profiline giriw edibse gorsensin/iwlesin: *@
+                @if (User.Identity.IsAuthenticated)
+                {
+                    @* 'Add To Cart' knopkasindan elave diger melumatlarida actiona POST etmek isteyirem deye yaradiram form-u: *@
+                    <form asp-controller="Cart" asp-action="AddToCart" method="post" class="d-inline">
+                        @* Hazirki mehsulun ID-sini saxlayiram hidden inputda (ki, hazirki form POST olunanda actiona hemin bu hidden inputun value-suda getsin): *@
+                        <input type="hidden" name="productID" value="@Model.ProductID">
+
+                        @* Mehsuldan nece dene alinmaq istendiyinide saxlayiram bir hidden inputda eyni meqsedle: *@
+                        <input type="hidden" name="productQuantity" value="1">
+
+                        <button type="submit" class="btn btn-primary btn-sm">Add To Cart</button>
+                    </form>
+                }
             </div>
         </div>
     </div>

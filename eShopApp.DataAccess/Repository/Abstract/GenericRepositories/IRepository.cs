@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using eShopApp.Entity.Entities;
-
-namespace eShopApp.DataAccess.Repository.Abstract.GenericRepositories
+﻿namespace eShopApp.DataAccess.Repository.Abstract.GenericRepositories
 {
     /// <summary>
     /// Repository interfeysleri ucun ortaq funksionalliqlarin skletini saxlayir.

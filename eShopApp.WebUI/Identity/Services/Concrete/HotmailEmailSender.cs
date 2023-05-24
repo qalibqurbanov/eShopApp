@@ -1,5 +1,3 @@
-using System.Globalization;
-using System;
 using System.Net;
 using System.Net.Mail;
 using eShopApp.WebUI.Identity.Services.Abstract;

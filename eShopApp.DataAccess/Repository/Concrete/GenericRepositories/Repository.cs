@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using eShopApp.Entity.Entities;
+using Microsoft.EntityFrameworkCore;
 using eShopApp.DataAccess.DatabaseContext;
 using eShopApp.DataAccess.Repository.Abstract.GenericRepositories;
-using eShopApp.Entity.Entities;
-using Microsoft.EntityFrameworkCore;
 
 namespace eShopApp.DataAccess.Repository.Concrete.GenericRepositories
 {
@@ -101,6 +96,12 @@ namespace eShopApp.DataAccess.Repository.Concrete.GenericRepositories
 
                 /* Oz entity-mi ise update edirem: */
                 _dbContext.Entry(entity).State = EntityState.Modified;
+                _dbContext.SaveChanges();
+            }
+
+            else if(entity is Cart cart)
+            {
+                (_dbContext as ShopDbContext).Carts.Update(cart); /* Burada entity-ni bu wekilde: "_dbContext.Entry(cart).State = EntityState.Modified;" :update etseydim elaqeli cedveller yenilenmiw olmayacaq idi, burada sirf 'entity'-nin 'State'-ni deyiwmiw olacaqdim, bu sebeble 'Update()' komeyile yenileyirem 'Cart'-i. */
                 _dbContext.SaveChanges();
             }
         }

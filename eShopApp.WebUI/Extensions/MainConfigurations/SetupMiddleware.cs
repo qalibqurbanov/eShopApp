@@ -23,7 +23,6 @@
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
-            // app.UseSession();
             app.UseRouting();
 
             app.UseAuthentication();
@@ -31,6 +30,19 @@
 
             app.UseEndpoints(endpoints =>
             {
+                #region Cart Controller
+                // "~/cart/"
+                endpoints.MapControllerRoute
+                (
+                    name: "cart",
+                    pattern: "cart",
+                    defaults: new { controller = "Cart", action = "Index" }
+                );
+                #endregion Cart Controller
+
+
+
+                #region Admin Controller
                 // "~/admin/users/" : 'default' route-dan once yazilmalidir ki, "~/admin/users/" sxeminin default route-a uygun gelmesi sebebile default route ile ilk qarwilawaraq default route iwlemesin.
                 endpoints.MapControllerRoute
                 (
@@ -140,9 +152,11 @@
                     pattern: "admin/category/{id?}",
                     defaults: new { controller = "Admin", action = "EditCategory" }
                 );
+                #endregion Admin Controller
 
 
 
+                #region Shop Controller
                 // "~/search/"   : Sorgu sirf bu wekilde atilsa '_noproduct' render olunacaq, cunki axtarilacaq olan mehsul adi verilmeyib Query Stringe("?q=..."),
                 // verilmediyi ucun de actiona bow string gedir ve bow addada nese bir mehsul tapilmadigina gore '_noproduct' render olunur.
                 // "~/search?q=" : '_search' partialinda form submit olunanda bu 'q' yazilacaq Query Stringe ve Actionda bu 'q'-ni yaxalayaraq DB-da axtaracayiq mehsulu.
@@ -163,9 +177,11 @@
                     pattern: "products/{id?}", /* 'id' : Route-un optional olan bu hissesi produktlarini elde edeceyimiz kateqoriyanin ID-sini temsil edir, route-dan ID yaxalanmasa butun mehsullar siralanacaq. 'Categories' ViewComponentinde sol menyu elementlerini render etdirdik ve dedik ki hemin bu soldaki kateqoriyalardan 'All Categories'-e kliklense '~/products/' Route-u iwlesin, diger hansi menyu elementi kliklense hemin kateqoriyanin ID-sini yaz Route-a ve belece route olacaq "/products/id" ve yene eyni qaydada bu route iwleyecek.  */
                     defaults: new { controller = "Shop", action = "List" }
                 );
+                #endregion Shop Controller
 
 
 
+                #region Default Routes
                 // "~/home/index/"
                 endpoints.MapControllerRoute
                 (
@@ -174,6 +190,7 @@
                 );
 
                 endpoints.MapRazorPages();
+                #endregion Default Routes
             });
         }
     }

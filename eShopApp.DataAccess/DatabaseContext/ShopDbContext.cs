@@ -11,9 +11,11 @@ namespace eShopApp.DataAccess.DatabaseContext
     {
         public ShopDbContext(DbContextOptions<ShopDbContext> options) : base(options) { }
 
-        public DbSet<Product> Products { get; set; }
-        public DbSet<Category> Categories { get; set; }
+        public DbSet<Product>         Products        { get; set; }
+        public DbSet<Category>        Categories      { get; set; }
         public DbSet<ProductCategory> ProductCategory { get; set; }
+        public DbSet<Cart>            Carts           { get; set; }
+        public DbSet<CartItem>        CartItems       { get; set; }
 
         public override int SaveChanges()
         {
@@ -27,11 +29,11 @@ namespace eShopApp.DataAccess.DatabaseContext
                     case EntityState.Added:
                     case EntityState.Modified:
                     {
-                            /* Mehsul yaradilanda ve ya uzerinde deyiwiklik edilende mehsul wekli gosterilmeyibse hemin mehsula default wekil verirem: */
-                            if (data.Entity.ProductImageName == null || string.IsNullOrEmpty(data.Entity.ProductImageName))
-                            {
-                                data.Entity.ProductImageName = "DEFAULT.png";
-                            }
+                        /* Mehsul yaradilanda ve ya uzerinde deyiwiklik edilende mehsul wekli gosterilmeyibse hemin mehsula default wekil verirem: */
+                        if (data.Entity.ProductImageName == null || string.IsNullOrEmpty(data.Entity.ProductImageName))
+                        {
+                            data.Entity.ProductImageName = "DEFAULT.png";
+                        }
                     } break;
                 }
             }

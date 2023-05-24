@@ -1,5 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
-using eShopApp.Entity.Entities;
+﻿using eShopApp.Entity.Entities;
+using System.ComponentModel.DataAnnotations;
 
 namespace eShopApp.WebUI.Models.ViewModels
 {
@@ -38,4 +38,4 @@ namespace eShopApp.WebUI.Models.ViewModels
     }
 }
 
-/* Yuxarida Data Annotation-lar ile teleb etdiyim validasiya qaydalarini gedib 'Product' sinifinin ozunde yazmagim dogru olmazdi - cunki 'Entity' qatini tek 'UI' qati iwletmeyecek ve hemin bu diger qatlarda 'Product' ferqli meqsedlerle iwledile biler - sebeb budur. */
+/* Yuxarida ve diger ViewModel-lerde 'Data Annotation'-lar ile teleb etdiyim validasiya qaydalarini gedib 'Product' sinifinin ozunde yazmagim dogru olmazdi - cunki, 'Entity' qatini tek 'UI' qati iwletmeyecek ve hemin bu diger qatlarda 'Product' ferqli meqsedlerle iwledile biler - sebeb budur. */

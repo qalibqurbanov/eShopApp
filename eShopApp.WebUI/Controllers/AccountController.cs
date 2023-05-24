@@ -3,28 +3,34 @@ using eShopApp.WebUI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using eShopApp.WebUI.Identity.Entities;
-using eShopApp.WebUI.Models.IdentityModels.Login;
+using eShopApp.Business.Services.Abstract;
 using eShopApp.WebUI.Extensions.Serialization;
 using eShopApp.WebUI.Identity.Services.Abstract;
+using eShopApp.WebUI.Models.IdentityModels.Login;
 
 namespace eShopApp.WebUI.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly UserManager<AppUser> _userManager; /* Userleri idare etmeyimize yarayan sinifdir, bawqa sozle: User yaratmaq/yenilemek/silmek, useri mueyyen bir rola elave etmek/silmek, usere bir Claim elave etmek/silmek, wifre deyiwdirmek, @mail tesdiqleme ve s. kimi user emeliyyatlarini yerine yetirir. */
+        private readonly UserManager<AppUser>   _userManager; /* Userleri idare etmeyimize yarayan sinifdir, bawqa sozle: User yaratmaq/yenilemek/silmek, useri mueyyen bir rola elave etmek/silmek, usere bir Claim elave etmek/silmek, wifre deyiwdirmek, @mail tesdiqleme ve s. kimi user emeliyyatlarini yerine yetirir. */
         private readonly SignInManager<AppUser> _signInManager; /* Userin giriw ve cixiwini kontrol eden sinifdir, bawqa sozle: User giriw/cixiw/TwoFactorAuthentication kimi emeliyyatlari yerine yetirir. */
-        private readonly IMapper _mapper;
-        private readonly IEmailSender _emailSender;
-        public AccountController(
-            UserManager<AppUser> userManager,
+        private readonly ICartService           _cartService;
+        private readonly IMapper                _mapper;
+        private readonly IEmailSender           _emailSender;
+        public AccountController
+        (
+            UserManager<AppUser>   userManager,
             SignInManager<AppUser> signInManager,
-            IMapper mapper,
-            IEmailSender emailSender)
+            ICartService           cartService,
+            IMapper                mapper,
+            IEmailSender           emailSender
+        )
         {
-            this._userManager = userManager;
+            this._userManager   = userManager;
             this._signInManager = signInManager;
-            this._mapper = mapper;
-            this._emailSender = emailSender;
+            this._cartService   = cartService;
+            this._mapper        = mapper;
+            this._emailSender   = emailSender;
         }
 
         #region Identity ile elaqeli reallawdirilmiw emeliyyatlar barede usere sehifenin ust hissesinde gostereceyimiz mesaji set eden komekci mini metod.
@@ -46,6 +52,7 @@ namespace eShopApp.WebUI.Controllers
         }
         #endregion User icazesinin olmadigi sehifeye kecid etse
 
+        #region SignIn/SignOut operations
         [HttpGet]
         public IActionResult SignIn()
         {
@@ -89,6 +96,9 @@ namespace eShopApp.WebUI.Controllers
             var result = await _signInManager.PasswordSignInAsync(appUser, model.Password, model.RememberMe, false);
             if (result.Succeeded) /* Useri profiline ugurla giriw etdirdikse */
             {
+                /* User profiline ugurla giriw etdiyi anda (bu emeliyyati user emailini tesdiqlediyi anda da ede bilerdik ve s.) 'Carts' cedvelinde hemin bu usere aid yeni bir 'Cart' qeydi yaradiriq ve belece usere yeni bir Cart tehkim edirik (ki, artiq istediyi mehsulu 'Cart (Sebet)'-na elave ede bilsin), yeni hazirki userin artiq bir 'Cart (Sebet)'-i var ve user hemin bu 'Cart (Sebet)'-na istediyi mehsulu(CartItem) elave ede biler: */
+                _cartService.InitializeCart(appUser.Id);
+
                 if (TempData["QueryStringKey"] != null) /* Query String-den 'ReturnUrl' yaxalanibsa, useri yonlendiririk yaxalanmiw hemin URL-e */
                 {
                     return Redirect(TempData["QueryStringKey"].ToString());
@@ -105,7 +115,19 @@ namespace eShopApp.WebUI.Controllers
             /* Userin post etdiyi form-da nese bir problem varsa, daxil etmiw oldugu hemin datalar ile birlikde qaytaririq hemin bu signin sehifesine: */
             return View(model);
         }
+        
+        [HttpGet]
+        public async Task<IActionResult> SignOut()
+        {
+            /* Autentifikasiya Cookie-sini brauzerden sildirmekle useri profilinde logout etdiririk: */
+            await _signInManager.SignOutAsync();
 
+            /* Useri profilinden cixardandan sonra useri yonlendirek ana sehifeye: */
+            return RedirectToAction("Index", "Home");
+        }
+        #endregion SignIn/SignOut operations
+
+        #region SignUp operations
         [HttpGet]
         public IActionResult SignUp()
         {
@@ -414,7 +436,9 @@ namespace eShopApp.WebUI.Controllers
             /* User her hansi bir sebeble yaradila bilmese, useri daxil etmiw oldugu hemin datalar ile birlikde qaytaririq 'SignUp' sehifesine: */
             return View(model);
         }
+        #endregion SignUp operations
 
+        #region Email Confirmation operations
         [HttpGet]
         public async Task<IActionResult> ConfirmEmail([FromQuery] int UserID, [FromQuery] string Token)
         /* Bu action, user mailine gelmiw linke kliklenende iwleyecek ve hemin linkdeki Query String parametrleri avtomatik bind olunacaq buradaki uygun parametrlere */
@@ -458,7 +482,9 @@ namespace eShopApp.WebUI.Controllers
 
             return View();
         }
+        #endregion Email Confirmation operations
 
+        #region Reset operations
         [HttpGet]
         public IActionResult Reset()
         {
@@ -573,15 +599,6 @@ namespace eShopApp.WebUI.Controllers
 
             return View();
         }
-
-        [HttpGet]
-        public async Task<IActionResult> SignOut()
-        {
-            /* Autentifikasiya Cookie-sini brauzerden sildirmekle useri profilinde logout etdiririk: */
-            await _signInManager.SignOutAsync();
-
-            /* Useri profilinden cixardandan sonra useri yonlendirek ana sehifeye: */
-            return RedirectToAction("Index", "Home");
-        }
+        #endregion Reset operations
     }
 }

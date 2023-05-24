@@ -6,23 +6,49 @@
 
         <hr />
 
-        <h4 class="text-info p-2 text-center">
-            @Model.Product.ProductPrice <i class="fas fa-manat-sign"></i>
-        </h4>
+        <table class="table table-bordered table-hover">
+            <tbody>
+                <tr>
+                    <th>Shipping</th>
+                    <th>Free</th>
+                </tr>
+
+                <tr>
+                    <th>Price</th>
+                    <th>@Model.Product.ProductPrice <i class="fas fa-manat-sign"></i></th>
+                </tr>
+
+                <tr>
+                    @* "box-shadow: none" - Bootstrapin "table elementine hover olunan zaman effekt vermek" ucun sinifi var, amma hemin o hover effektini cedvelin her hansi elementi ucun deaktiv etmeyin yolu budur. *@
+                    <th colspan="2" class="bg-light" style="box-shadow: none;">
+                        @* 'Add To Cart' knopkasindan elave diger melumatlarida actiona POST etmek isteyirem deye yaradiram form-u: *@
+                        <form asp-controller="Cart" asp-action="AddToCart" method="post" class="d-inline">
+                            @* Hazirki mehsulun ID-sini saxlayiram hidden inputda (ki, hazirki form POST olunanda actiona hemin bu hidden inputun value-suda getsin): *@
+                            <input type="hidden" name="productID" value="@Model.Product.ProductID">
+
+                            <div class="input-group">
+                                <span class="input-group-text bg-primary">
+                                    <i class="fa-solid fa-layer-group text-white"></i>
+                                </span>
+
+                                <input type="number" class="form-control" name="productQuantity" value="1" min="1" step="1">
+
+                                <button type="submit" class="btn btn-primary btn-sm">
+                                    <i class="fa-solid fa-cart-plus" style="color: white !important;"></i> Add To Card
+                                </button>
+                            </div>
+                        </form>
+                   </th>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
     <div class="col-md-9">
         <div class="card mt-4">
             <div class="card-body">
-                <h5 class="card-title display-6 text-warning">@Model.Product.ProductName</h5>
-
-                <hr />
-
+                <h2 class="text-center text-danger">@Model.Product.ProductName</h2>
                 <h5 class="card-text fw-medium text-dark">&nbsp;&nbsp;&nbsp;&nbsp;@Html.Raw(@Model.Product.ProductDescription)</h5>
-
-                <div class="d-flex justify-content-center pt-2 pb-2">
-                    <button type="submit" class="btn btn-primary btn-lg">Add to Cart</button>
-                </div>
 
                 <hr />
 

@@ -1,5 +1,3 @@
-using eShopApp.WebUI.Identity.Entities;
-
 namespace eShopApp.WebUI.Models.IdentityModels.Role
 {
     /// <summary>
