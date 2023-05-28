@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using eShopApp.WebUI.Identity.Entities;
 using eShopApp.Business.Services.Abstract;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using eShopApp.WebUI.Extensions.Serialization;
 using eShopApp.WebUI.Identity.Services.Abstract;
 using eShopApp.WebUI.Models.IdentityModels.Login;
@@ -140,6 +141,19 @@ namespace eShopApp.WebUI.Controllers
         {
             if (!ModelState.IsValid)
             {
+                /* Baw vermiw xetayla elaqeli mesaj vasitesile useri hemin bu xeta haqqinda melumatlandiririq: */
+                List<ModelError> errorList = ModelState.Values.SelectMany(modelStateEntry => modelStateEntry.Errors).ToList();
+                foreach(ModelError error in errorList)
+                {
+                    ModelState.AddModelError("", error.ErrorMessage);
+
+                    CreateInformationalMessage
+                    (
+                        AlertMessage: error.ErrorMessage,
+                        AlertType: AlertMessage.AlertType.info
+                    );
+                }
+
                 /* User kecersiz datalar daxil edibse, useri yeniden qaytaririq oldugu sehifeye ve qarwisinda qutular yanliw daxil etmiw oldugu melumatlarla dolu olsun (ki, daxil etmiw oldugu datalari gozden kecirib editlesin ve yeniden post etsin formu): */
                 return View(model);
             }
@@ -432,9 +446,23 @@ namespace eShopApp.WebUI.Controllers
                     return RedirectToAction(nameof(SignIn));
                 }
             }
+            else /* User yaradilan vaxt nese bir sebeb ile (mes: Password icerisinde reqem yoxdur ve s.) xeta baw veribse */
+            {
+                /* Baw vermiw xetayla elaqeli mesaj vasitesile useri hemin bu xeta haqqinda melumatlandiririq: */
+                foreach(IdentityError error in result.Errors)
+                {
+                    // ModelState.AddModelError("", error.Description);
 
-            /* User her hansi bir sebeble yaradila bilmese, useri daxil etmiw oldugu hemin datalar ile birlikde qaytaririq 'SignUp' sehifesine: */
-            return View(model);
+                    CreateInformationalMessage
+                    (
+                        AlertMessage: error.Description,
+                        AlertType: AlertMessage.AlertType.info
+                    );
+                }
+
+                /* Ve useri daxil etmiw oldugu hemin datalar ile birlikde qaytaririq 'SignUp' sehifesine  */
+                return View(model);
+            }
         }
         #endregion SignUp operations
 

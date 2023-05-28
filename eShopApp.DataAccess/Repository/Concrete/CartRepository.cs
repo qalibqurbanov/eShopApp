@@ -1,3 +1,4 @@
+using eShopApp.Entity.Enums;
 using eShopApp.Entity.Entities;
 using Microsoft.EntityFrameworkCore;
 using eShopApp.DataAccess.DatabaseContext;
@@ -63,6 +64,34 @@ namespace eShopApp.DataAccess.Repository.Concrete
             }
 
             #nullable enable
+        }
+
+        public void ClearCart(int CartID, bool DisableChangeTracker)
+        {
+            List<CartItem> cartItems = new List<CartItem>();
+
+            if(DisableChangeTracker)
+            {
+                cartItems.AddRange
+                (
+                    DbTable_CartItem
+                        .AsNoTracking()
+                        .Where(cartItem => cartItem.CartID == CartID)
+                        .ToList()
+                );
+            }
+            else
+            {
+                cartItems.AddRange
+                (
+                    DbTable_CartItem
+                        .Where(cartItem => cartItem.CartID == CartID)
+                        .ToList()
+                );
+            }
+
+            _dbContext.CartItems.RemoveRange(cartItems);
+            _dbContext.SaveChanges();
         }
     }
 }

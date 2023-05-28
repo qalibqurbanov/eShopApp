@@ -1,0 +1,99 @@
+@model List<OrderListModel>
+
+<div class="row text-center">
+    <h1>Orders</h1>
+
+    <hr />
+
+    @foreach(OrderListModel order in Model)
+    {
+        <table class="table table-bordered table-sm mb-3">
+            <thead class="bg-primary">
+                <tr>
+                    <td class="text-light">Order Id: #@order.OrderNumber</td>
+                    <th class="text-light">Order details</th>
+                    <th class="text-light">Order note</th>
+                    <th class="text-light">Customer details</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @{
+                    string bawliqRengi = "text-primary";
+                    string dataRengi = "text-danger";
+                }
+
+                @foreach(OrderItemModel orderItem in order.OrderItems)
+                {
+                    <tr>
+                        <td>
+                            <span><img src="~/img/ProductImages/@orderItem.OrderItemImageName" width="100"></span>
+                        </td>
+
+                        <td>
+                            <p class="h6 d-block @dataRengi">
+                                <span class="@bawliqRengi">Name:</span> @orderItem.OrderItemName
+                            </p>
+
+                            <p class="h6 d-block @dataRengi">
+                                <span class="@bawliqRengi">Price:</span> @orderItem.OrderItemPrice
+                            </p>
+
+                            <p class="h6 d-block @dataRengi">
+                                <span class="@bawliqRengi">Quantity:</span> @orderItem.OrderItemQuantity
+                            </p>
+                        </td>
+
+
+
+                        <td>
+                            <p class="h6 d-block">
+                                <span class="@dataRengi">@order.Note</span>
+                            </p>
+                        </td>
+
+
+
+                        <td>
+                            <p class="h6 d-block @dataRengi">
+                                <span class="@bawliqRengi">User ID:</span> @order.UserID
+                            </p>
+
+                            <p class="h6 d-block @dataRengi">
+                                <span class="@bawliqRengi">Order date:</span> @order.OrderDate
+                            </p>
+
+                            <p class="h6 d-block @dataRengi">
+                                <span class="@bawliqRengi">First name:</span> @order.FirstName
+                            </p>
+
+                            <p class="h6 d-block @dataRengi">
+                                <span class="@bawliqRengi">Last name:</span> @order.LastName
+                            </p>
+
+                            <p class="h6 d-block @dataRengi">
+                                <span class="@bawliqRengi">Email:</span> @order.Email
+                            </p>
+
+                            <p class="h6 d-block @dataRengi">
+                                <span class="@bawliqRengi">Phone:</span> @order.Phone
+                            </p>
+
+                            <p class="h6 d-block @dataRengi">
+                                <span class="@bawliqRengi">City:</span> @order.City
+                            </p>
+
+                            <p class="h6 d-block @dataRengi">
+                                <span class="@bawliqRengi">Address:</span> @order.Address
+                            </p>
+
+                            <p class="h6 d-block @dataRengi">
+                                <span class="@bawliqRengi">Postal code:</span> @order.PostalCode
+                            </p>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

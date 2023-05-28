@@ -1,0 +1,72 @@
+@{ Layout = null; }
+
+<html>
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:400,400i,700,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" crossorigin="anonymous" />
+</head>
+
+<style>
+    body {
+        text-align: center;
+        padding: 50px 0;
+        background: #EBF0F5;
+    }
+
+    .successPageCard h1 {
+        color: #88B04B;
+        font-family: "Nunito Sans", "Helvetica Neue", sans-serif;
+        font-weight: 900;
+        font-size: 40px;
+        margin-bottom: 10px;
+    }
+
+    .successPageCard p {
+        color: #404F5E;
+        font-family: "Nunito Sans", "Helvetica Neue", sans-serif;
+        font-size: 20px;
+        margin: 0;
+    }
+
+    .successPageCard i {
+        color: #9ABC66;
+        font-size: 100px;
+        line-height: 200px;
+        margin-left: -15px;
+    }
+
+    .successPageCard {
+        background: white;
+        padding: 60px;
+        border-radius: 4px;
+        box-shadow: 0 2px 3px #C8D0D8;
+        display: inline-block;
+        margin: 0 auto;
+    }
+</style>
+
+<body>
+    <div class="successPageCard">
+        <div style="border-radius:200px; height:200px; width:200px; background: #F8FAF5; margin:0 auto;">
+            <i class="checkmark">✓</i>
+        </div>
+
+        <h1>Success</h1>
+
+        <p>
+            Dear @User.Identity.Name, we received your purchase request, thank you for buying from us!<br>
+            The product will be delivered to you as soon as possible.
+        </p>
+
+        <div class="btn-group mt-4">
+            <a href="/" class="btn btn-warning">
+                Continue shopping
+            </a>
+            <a href="/orders" class="btn btn-success">
+                My orders
+            </a>
+        </div>
+    </div>
+</body>
+
+</html>

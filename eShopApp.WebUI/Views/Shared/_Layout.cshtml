@@ -16,6 +16,8 @@
 
 <body>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    
 
     <div class="container pb-0 mb-0">
         @await Html.PartialAsync("/Views/Shared/Partials/_navbar.cshtml")
@@ -44,7 +46,7 @@
         @await Html.PartialAsync("/Views/Shared/Partials/_footer.cshtml")
     </div>
 
-    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    
 
     @RenderSection("Scripts", false)
 </body>

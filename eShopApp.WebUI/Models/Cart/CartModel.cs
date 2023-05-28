@@ -35,11 +35,12 @@ namespace eShopApp.WebUI.Models.Cart
     /// </summary>
     public class CartItemModel
     {
-        public int    CartItemID { get; set; }
-        public int    ProductID  { get; set; }
-        public string Name       { get; set; }
-        public double Price      { get; set; }
-        public string ImageName  { get; set; }
-        public int    Quantity   { get; set; }
+        public int    CartItemID  { get; set; }
+        public int    ProductID   { get; set; }
+        public string Name        { get; set; }
+        public double Price       { get; set; }
+        public string Description { get; set; }
+        public string ImageName   { get; set; }
+        public int    Quantity    { get; set; }
     }
 }

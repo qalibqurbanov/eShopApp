@@ -47,6 +47,11 @@ namespace eShopApp.Business.Services.Concrete
             }
         }
 
+        public void ClearCart(int CartID)
+        {
+            _cartRepository.ClearCart(CartID, false);
+        }
+
         public void DeleteFromCart(int UserID, int ProductID)
         {
             /* Ilk once userin ID-si esasinda, icerisinden mehsul sileceyim sebeti elde edirem: */

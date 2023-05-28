@@ -31,6 +31,26 @@
             app.UseEndpoints(endpoints =>
             {
                 #region Cart Controller
+                // "~/orders/"
+                endpoints.MapControllerRoute
+                (
+                    name: "orderList",
+                    pattern: "orders",
+                    defaults: new { controller = "Cart", action = "OrderList" }
+                );
+
+
+
+                // "~/checkout/"
+                endpoints.MapControllerRoute
+                (
+                    name: "checkout",
+                    pattern: "checkout",
+                    defaults: new { controller = "Cart", action = "Checkout" }
+                );
+
+
+
                 // "~/cart/"
                 endpoints.MapControllerRoute
                 (

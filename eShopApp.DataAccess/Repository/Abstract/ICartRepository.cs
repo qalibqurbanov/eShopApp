@@ -10,5 +10,6 @@ namespace eShopApp.DataAccess.Repository.Abstract
     {
         Cart GetByUserID(int UserID, bool DisableChangeTracker);
         void DeleteFromCart(int CartID, int ProductID, bool DisableChangeTracker);
+        void ClearCart(int CartID, bool DisableChangeTracker);
     }
 }
