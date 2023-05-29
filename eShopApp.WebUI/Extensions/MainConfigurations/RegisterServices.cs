@@ -10,6 +10,8 @@ using eShopApp.DataAccess.Repository.Concrete;
 using eShopApp.WebUI.Identity.DatabaseContext;
 using eShopApp.WebUI.Identity.Services.Abstract;
 using eShopApp.WebUI.Identity.Services.Concrete;
+using eShopApp.DataAccess.UnitOfWork.Abstract;
+using eShopApp.DataAccess.UnitOfWork.Concrete;
 
 namespace eShopApp.WebUI.Extensions.MainConfigurations
 {
@@ -101,6 +103,8 @@ namespace eShopApp.WebUI.Extensions.MainConfigurations
             serviceCollection.AddScoped<ICategoryService, CategoryManager>();
             serviceCollection.AddScoped<ICartService, CartManager>();
             serviceCollection.AddScoped<IOrderService, OrderManager>();
+
+            serviceCollection.AddScoped<IUnitOfWork, UnitOfWork>();
 
             serviceCollection.AddScoped<IEmailSender, HotmailEmailSender>(serviceProvider => new HotmailEmailSender
             (

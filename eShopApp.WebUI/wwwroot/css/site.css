@@ -17,27 +17,30 @@ body
 
 .fa-check
 {
-    color: green !important;
+    color: green;
 }
 
 .fa-xmark
 {
-    color: red !important ;
+    color: red;
 }
 
-.phone-input {
+.phone-input 
+{
     display: flex;
     align-items: center;
 }
 
-.phone-input select {
+.phone-input select 
+{
     padding: 0.5rem;
     border: 1px solid #ccc;
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
 }
 
-.phone-input input {
+.phone-input input 
+{
     flex: 1;
     border: 1px solid #ccc;
     border-top-right-radius: 5px;

@@ -52,7 +52,8 @@ namespace eShopApp.DataAccess.Repository.Concrete
             if (dataToDelete != null)
             {
                 _dbContext.ProductCategory.Remove(dataToDelete);
-                _dbContext.SaveChanges();
+
+                //_dbContext.SaveChanges();
             }
         }
     }

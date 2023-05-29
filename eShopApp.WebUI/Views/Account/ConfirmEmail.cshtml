@@ -4,40 +4,51 @@
 
 <html>
 <head>
-    
+
     <link rel="stylesheet" href="~/css/loginForm.css" />
+    <link rel="stylesheet" href="~/css/emailConfirmation.css" />
 </head>
+
 <body>
-    <div class="wrapper bg-white">
-        <h1>Email Confirmation Result</h1>
+    <div class="content">
+        <div class="wrapper-1">
+            <div class="wrapper-2">
+                <h1>Email Confirmation Result</h1>
 
-        @{
-            AlertMessage alertMessage = TempData.Get<AlertMessage>("InformationalMessage");
+                <hr>
 
-            if (alertMessage != null)
-            {
-                <div class="row mt-4">
-                    <div class="col-md-12">
-                        <div class="alert alert-@alertMessage.alertType">
-                            @alertMessage.alertMessage
-                        </div>
-                    </div>
+                <div class="row d-block text-center text-light">
+                    @{
+                        AlertMessage alertMessage = TempData.Get<AlertMessage>("InformationalMessage");
+
+                        if (alertMessage != null)
+                        {
+                            <div class="container text-center text-light mt-2">
+                                @if (alertMessage.alertType == AlertMessage.AlertType.success)
+                                {
+                                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" />
+                                    <a href="/account/signin" class="btn btn-success">Sign In</a>
+                                }
+                                @if (alertMessage.alertType == AlertMessage.AlertType.danger)
+                                {
+                                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" />
+                                    <a href="/account/signup" class="btn btn-success">Sign Up</a>
+                                }
+                            </div>
+                        }
+                    }
                 </div>
-            }
 
-            TempData.Remove("InformationalMessage"); @* Bawqa sehifelere kecende kecmiw mesaj gorsenmesin deye mesaji silirem TempData-dan *@
-        }
-        <div class="row d-block text-center">
-            @if(alertMessage.alertType == AlertMessage.AlertType.success)
-            {
-                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" />
-                <a href="/account/signin" class="btn btn-success">SignIn</a>
-            }
-            @if(alertMessage.alertType == AlertMessage.AlertType.danger)
-            {
-                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" />
-                <a href="/account/signup" class="btn btn-success">SignUp</a>
-            }
+            </div>
+            <div class="footer-like">
+                <partial name="Partials/_AlertMessage" />
+
+                @* <p>Email not received?
+                <a href="#">Click here to send again</a>
+                </p> *@
+            </div>
         </div>
     </div>
+
+    <link href="https://fonts.googleapis.com/css?family=Kaushan+Script|Source+Sans+Pro" rel="stylesheet">
 </body>

@@ -1,0 +1,16 @@
+@{
+    AlertMessage alertMessage = TempData.Get<AlertMessage>("InformationalMessage");
+
+    if (alertMessage != null)
+    {
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <div class="alert alert-@alertMessage.alertType bg-light p-2">
+                    <p class="h6 text-dark">@alertMessage.alertMessage</p>
+                </div>
+            </div>
+        </div>
+    }
+
+    TempData.Remove("InformationalMessage"); @* Bawqa sehifelere kecende kecmiw mesaj gorsenmesin deye mesaji silirem TempData-dan *@
+}

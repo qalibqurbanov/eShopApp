@@ -1,20 +1,5 @@
 @model OrderDetailsModel
 
-@if(Model == null)
-{
-    <h1>Model nulldur</h1>
-}
-
-@if(Model.CartModel == null)
-{
-    <h1>CartModel nulldur</h1>
-}
-
-@if(Model.CartModel.CartItems == null)
-{
-    <h1>CartItems nulldur</h1>
-}
-
 <div class="row p-2">
     <div>
         <div asp-validation-summary="All" class="text-danger"></div>

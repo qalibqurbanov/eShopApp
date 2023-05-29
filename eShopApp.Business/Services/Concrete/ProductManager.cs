@@ -1,15 +1,15 @@
 ﻿using eShopApp.Entity.Entities;
 using eShopApp.Business.Services.Abstract;
-using eShopApp.DataAccess.Repository.Abstract;
+using eShopApp.DataAccess.UnitOfWork.Abstract;
 
 namespace eShopApp.Business.Services.Concrete
 {
     public class ProductManager : IProductService
     {
-        private readonly IProductRepository _productRepository;
-        public ProductManager(IProductRepository productRepository)
+        private readonly IUnitOfWork _unitOfWork;
+        public ProductManager(IUnitOfWork unitOfWork)
         {
-            _productRepository = productRepository;
+            this._unitOfWork = unitOfWork;
         }
 
         #region IValidator
@@ -42,7 +42,7 @@ namespace eShopApp.Business.Services.Concrete
         {
             if (Validate(entity))
             {
-                _productRepository.Update(entity);
+                _unitOfWork.Products.Update(entity);
 
                 return true;
             }
@@ -64,7 +64,7 @@ namespace eShopApp.Business.Services.Concrete
                 }
                 else
                 {
-                    _productRepository.Update(entity, CategoryIDs);
+                    _unitOfWork.Products.Update(entity, CategoryIDs);
                     return true;
                 }
             }
@@ -78,7 +78,7 @@ namespace eShopApp.Business.Services.Concrete
         {
             if(Validate(entity))
             {
-                _productRepository.Create(entity);
+                _unitOfWork.Products.Create(entity);
 
                 return true;
             }
@@ -92,7 +92,7 @@ namespace eShopApp.Business.Services.Concrete
         {
             if (Validate(entity))
             {
-                _productRepository.Create(entity, CategoryIDs);
+                _unitOfWork.Products.Create(entity, CategoryIDs);
 
                 return true;
             }
@@ -104,47 +104,47 @@ namespace eShopApp.Business.Services.Concrete
 
         public void Delete(Product entity)
         {
-            _productRepository.Delete(entity);
+            _unitOfWork.Products.Delete(entity);
         }
 
         public List<Product> GetAll()
         {
-            return _productRepository.GetAll(true);
+            return _unitOfWork.Products.GetAll(true);
         }
 
         public Product GetByID(int ID)
         {
-            return _productRepository.GetByID(ID, true);
+            return _unitOfWork.Products.GetByID(ID, true);
         }
 
         public List<Product> GetHomePageProducts()
         {
-            return _productRepository.GetHomePageProducts(true);
+            return _unitOfWork.Products.GetHomePageProducts(true);
         }
 
         public int GetProductCountByCategoryID(int? CategoryID)
         {
-            return _productRepository.GetProductCountByCategoryID(CategoryID, true);
+            return _unitOfWork.Products.GetProductCountByCategoryID(CategoryID, true);
         }
 
         public Product GetProductDetails(int ID)
         {
-            return _productRepository.GetProductDetails(ID, true);
+            return _unitOfWork.Products.GetProductDetails(ID, true);
         }
 
         public List<Product> GetProductsByCategoryID(int? CategoryID, int Page, int ProductCountByPage)
         {
-            return _productRepository.GetProductsByCategoryID(CategoryID, Page, ProductCountByPage, true);
+            return _unitOfWork.Products.GetProductsByCategoryID(CategoryID, Page, ProductCountByPage, true);
         }
 
         public List<Product> GetSearchResult(string SearchString)
         {
-            return _productRepository.GetSearchResult(SearchString, true);
+            return _unitOfWork.Products.GetSearchResult(SearchString, true);
         }
 
         public Product GetByIdWithCategories(int id)
         {
-            return _productRepository.GetByIdWithCategories(id, true);
+            return _unitOfWork.Products.GetByIdWithCategories(id, true);
         }
     }
 }

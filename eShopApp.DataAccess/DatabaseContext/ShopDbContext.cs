@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using eShopApp.Entity.EntityConfiguration.FluentAPI;
+using System.Reflection;
 
 namespace eShopApp.DataAccess.DatabaseContext
 {
@@ -53,10 +54,12 @@ namespace eShopApp.DataAccess.DatabaseContext
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //modelBuilder.ApplyConfiguration(new ProductConfiguration());
-            //modelBuilder.ApplyConfiguration(new CategoryConfiguration());
-            //modelBuilder.ApplyConfiguration(new OrderConfiguration());
+            modelBuilder.ApplyConfiguration(new ProductConfiguration());
+            modelBuilder.ApplyConfiguration(new CategoryConfiguration());
+            modelBuilder.ApplyConfiguration(new OrderConfiguration());
             modelBuilder.ApplyConfiguration(new ProductCategoryConfiguration());
+            // Ve yaxud qisaca: \\
+            // modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly()); /* Hazirki Assembly icerisinde 'IEntityTypeConfiguration' interfeysini implement eden sinifleri vermiw olduq. */
         }
     }
 }

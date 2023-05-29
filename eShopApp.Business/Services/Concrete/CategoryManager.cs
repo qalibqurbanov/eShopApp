@@ -1,15 +1,15 @@
 ﻿using eShopApp.Entity.Entities;
 using eShopApp.Business.Services.Abstract;
-using eShopApp.DataAccess.Repository.Abstract;
+using eShopApp.DataAccess.UnitOfWork.Abstract;
 
 namespace eShopApp.Business.Services.Concrete
 {
     public class CategoryManager : ICategoryService
     {
-        private readonly ICategoryRepository _categoryRepository;
-        public CategoryManager(ICategoryRepository categoryRepository)
+        private readonly IUnitOfWork _unitOfWork;
+        public CategoryManager(IUnitOfWork unitOfWork)
         {
-            this._categoryRepository = categoryRepository;
+            this._unitOfWork = unitOfWork;
         }
 
         #region IValidator
@@ -20,7 +20,7 @@ namespace eShopApp.Business.Services.Concrete
             /* Ilk bawda model valid olmuw olsun: */
             bool isValid = true;
 
-            if (string.IsNullOrEmpty(entity.CategoryName))
+            if(string.IsNullOrEmpty(entity.CategoryName))
             {
                 ErrorMessage += "Kateqoriya adi bow buraxila bilmez!\n";
                 isValid = false;
@@ -34,9 +34,10 @@ namespace eShopApp.Business.Services.Concrete
 
         public bool Update(Category entity)
         {
-            if (Validate(entity))
+            if(Validate(entity))
             {
-                _categoryRepository.Update(entity);
+                _unitOfWork.Categories.Update(entity);
+                _unitOfWork.Commit();
 
                 return true;
             }
@@ -48,9 +49,10 @@ namespace eShopApp.Business.Services.Concrete
 
         public bool Create(Category entity)
         {
-            if (Validate(entity))
+            if(Validate(entity))
             {
-                _categoryRepository.Create(entity);
+                _unitOfWork.Categories.Create(entity);
+                _unitOfWork.Commit();
 
                 return true;
             }
@@ -62,27 +64,29 @@ namespace eShopApp.Business.Services.Concrete
 
         public void Delete(Category entity)
         {
-            _categoryRepository.Delete(entity);
-        }
-
-        public List<Category> GetAll()
-        {
-            return _categoryRepository.GetAll(true);
-        }
-
-        public Category GetByID(int ID)
-        {
-            return _categoryRepository.GetByID(ID, true);
-        }
-
-        public Category GetByIdWithProducts(int CategoryID)
-        {
-            return _categoryRepository.GetByIdWithProducts(CategoryID, true);
+            _unitOfWork.Categories.Delete(entity);
+            _unitOfWork.Commit();
         }
 
         public void DeleteProductFromCategory(int ProductID, int CategoryID)
         {
-            _categoryRepository.DeleteProductFromCategory(ProductID, CategoryID);
+            _unitOfWork.Categories.DeleteProductFromCategory(ProductID, CategoryID);
+            _unitOfWork.Commit();
+        }
+
+        public List<Category> GetAll()
+        {
+            return _unitOfWork.Categories.GetAll(true);
+        }
+
+        public Category GetByID(int ID)
+        {
+            return _unitOfWork.Categories.GetByID(ID, true);
+        }
+
+        public Category GetByIdWithProducts(int CategoryID)
+        {
+            return _unitOfWork.Categories.GetByIdWithProducts(CategoryID, true);
         }
     }
 }

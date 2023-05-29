@@ -35,8 +35,12 @@ namespace eShopApp.WebUI.Identity
                         /* Ilk once yaradacagim userin hazirda DB-da movcud olub-olmadigini yoxlayiram: */
                         if(await _userManager.FindByNameAsync(userName) == null)
                         {
-                            /* Ilk once rol yaradiram: */
-                            await _roleManager.CreateAsync(new AppRole() { Name = roleName });
+                            /* Yaratmaq istediyim rol hazirda DB-da movcud deyilse: */
+                            if(!await _roleManager.RoleExistsAsync(roleName))
+                            {
+                                /* Ilk once rol yaradiram: */
+                                await _roleManager.CreateAsync(new AppRole() { Name = roleName });
+                            }
 
                             /* Yaradacagim useri hazirlayiram: */
                             AppUser user = new AppUser()
@@ -54,8 +58,11 @@ namespace eShopApp.WebUI.Identity
                             /* Eger user ugurla yaradilsa: */
                             if(result.Succeeded)
                             {
-                                /* Useri elave edirem 'Admin' roluna: */
-                                await _userManager.AddToRoleAsync(user, roleName);
+                                if(await _roleManager.RoleExistsAsync(roleName))
+                                {
+                                    /* Useri elave edirem 'Admin' roluna: */
+                                    await _userManager.AddToRoleAsync(user, roleName);
+                                }
                             }
                         }
                     }

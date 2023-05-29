@@ -22,24 +22,8 @@
     <div class="container pb-0 mb-0">
         @await Html.PartialAsync("/Views/Shared/Partials/_navbar.cshtml")
 
-        @{
-            @* Istesem aparib 'ProductList' ve diger sehifelerdede yaza bilerdim bunu, lakin tekrara duwmemek ucun '_Layout' icerisinde yaziram ve eger TempData bow deyilse demeli her hansi bir operasiya edilib ve mende hemin bu operasiyaya qarwiliq olaraq uygun mesaji gosteririem. *@
-
-            AlertMessage alertMessage = TempData.Get<AlertMessage>("InformationalMessage");
-
-            if (alertMessage != null)
-            {
-                <div class="row mt-4">
-                    <div class="col-md-12">
-                        <div class="alert alert-@alertMessage.alertType">
-                            @alertMessage.alertMessage
-                        </div>
-                    </div>
-                </div>
-            }
-
-            TempData.Remove("InformationalMessage"); @* Bawqa sehifelere kecende kecmiw mesaj gorsenmesin deye mesaji silirem TempData-dan *@
-        }
+        @* Istesem aparib 'ProductList' ve diger sehifelerdede yaza bilerdim hemin bu tempdatadan data elde ederek sehifede yazdirma emeliyyatini, lakin tekrara duwmemek ucun '_Layout' icerisinde yaziram ve eger TempData-nin 'InformationalMessage' adli keyi bow deyilse demeli sehifede her hansi bir mesaj gosterilmek istenilir ve burada uygun hemin gosterilmesi istenilen mesaji gosterirem: *@
+        <partial name="Partials/_AlertMessage" />
 
         @RenderBody()
 

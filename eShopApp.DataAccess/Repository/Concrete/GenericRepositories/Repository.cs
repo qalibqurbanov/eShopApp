@@ -26,7 +26,7 @@ namespace eShopApp.DataAccess.Repository.Concrete.GenericRepositories
         {
             DbTable.Add(entity);
 
-            _dbContext.SaveChanges();
+            //_dbContext.SaveChanges();
         }
 
         public void Create(TEntity entity, int[] CategoryIDs)
@@ -45,12 +45,9 @@ namespace eShopApp.DataAccess.Repository.Concrete.GenericRepositories
 
                     Create(prod as TEntity);
 
-                    _dbContext.SaveChanges();
+                    //_dbContext.SaveChanges();
                 }
             }
-
-
-            _dbContext.SaveChanges();
         }
 
         public void Update(TEntity entity)
@@ -78,7 +75,8 @@ namespace eShopApp.DataAccess.Repository.Concrete.GenericRepositories
 
                 /* Oz entity-mi ise update edirem: */
                 _dbContext.Entry(entity).State = EntityState.Modified;
-                _dbContext.SaveChanges();
+
+                //_dbContext.SaveChanges();
             }
 
             else if (entity is Category cat)
@@ -96,13 +94,15 @@ namespace eShopApp.DataAccess.Repository.Concrete.GenericRepositories
 
                 /* Oz entity-mi ise update edirem: */
                 _dbContext.Entry(entity).State = EntityState.Modified;
-                _dbContext.SaveChanges();
+
+                //_dbContext.SaveChanges();
             }
 
             else if(entity is Cart cart)
             {
                 (_dbContext as ShopDbContext).Carts.Update(cart); /* Burada entity-ni bu wekilde: "_dbContext.Entry(cart).State = EntityState.Modified;" :update etseydim elaqeli cedveller yenilenmiw olmayacaq idi, burada sirf 'entity'-nin 'State'-ni deyiwmiw olacaqdim, bu sebeble 'Update()' komeyile yenileyirem 'Cart'-i. */
-                _dbContext.SaveChanges();
+
+                //_dbContext.SaveChanges();
             }
         }
 
@@ -131,7 +131,7 @@ namespace eShopApp.DataAccess.Repository.Concrete.GenericRepositories
                         CategoryID = catID
                     }).ToList();
 
-                    _dbContext.SaveChanges();
+                    //_dbContext.SaveChanges();
                 }
             }
         }
@@ -140,7 +140,7 @@ namespace eShopApp.DataAccess.Repository.Concrete.GenericRepositories
         {
             DbTable.Remove(entity);
 
-            _dbContext.SaveChanges();
+            //_dbContext.SaveChanges();
         }
 
         public List<TEntity> GetAll(bool DisableChangeTracker)

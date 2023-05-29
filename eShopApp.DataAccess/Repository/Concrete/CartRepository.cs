@@ -1,4 +1,3 @@
-using eShopApp.Entity.Enums;
 using eShopApp.Entity.Entities;
 using Microsoft.EntityFrameworkCore;
 using eShopApp.DataAccess.DatabaseContext;
@@ -39,7 +38,8 @@ namespace eShopApp.DataAccess.Repository.Concrete
             }
 
             _dbContext.CartItems.Remove(cartItem.FirstOrDefault()); /* 'CartItem'-i silirem ve belece mehsulu/CartItem 'Cart (Sebet)'-dan silmiw oluram */
-            _dbContext.SaveChanges();
+
+            //_dbContext.SaveChanges();
         }
 
         /* Cedvelden, 'UserID'-ye aid olan 'Cart' melumatlarini (+ hemin 'Cart'-la elaqeli olan 'CartItems' ve 'Product' melumatlarini) dondururem: */
@@ -91,7 +91,8 @@ namespace eShopApp.DataAccess.Repository.Concrete
             }
 
             _dbContext.CartItems.RemoveRange(cartItems);
-            _dbContext.SaveChanges();
+
+            //_dbContext.SaveChanges();
         }
     }
 }
